@@ -1,0 +1,47 @@
+{
+  "name": "@yamcs/webapp",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "build": "ng build webapp-sdk && ng build webapp",
+    "watch": "ng build webapp-sdk && ng build webapp --watch --configuration development",
+    "build-app": "ng build webapp",
+    "watch-app": "ng build webapp --watch --configuration development",
+    "build-lib": "ng build webapp-sdk",
+    "pack-lib": "cd dist/webapp-sdk; npm pack",
+    "watch-lib": "ng build webapp-sdk --watch --configuration development"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^16.0.2",
+    "@angular/cdk": "^16.0.1",
+    "@angular/common": "^16.0.2",
+    "@angular/compiler": "^16.0.2",
+    "@angular/core": "^16.0.2",
+    "@angular/forms": "^16.0.2",
+    "@angular/language-service": "^16.0.2",
+    "@angular/material": "^16.0.1",
+    "@angular/platform-browser": "^16.0.2",
+    "@angular/platform-browser-dynamic": "^16.0.2",
+    "@angular/router": "^16.0.2",
+    "@angular/service-worker": "^16.0.4",
+    "@fqqb/timeline": "^1.2.9",
+    "@types/dygraphs": "^2.1.4",
+    "@types/showdown": "^2.0.0",
+    "@yamcs/opi": "^1.2.9",
+    "brace": "^0.11.1",
+    "dayjs": "^1.11.4",
+    "dygraphs": "^2.1.0",
+    "rxjs": "^7.5.6",
+    "showdown": "^2.1.0",
+    "tslib": "^2.4.0",
+    "zone.js": "^0.13.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^16.0.2",
+    "@angular/cli": "^16.0.2",
+    "@angular/compiler-cli": "^16.0.2",
+    "ng-packagr": "^16.0.0",
+    "typescript": "~5.1.6"
+  }
+}

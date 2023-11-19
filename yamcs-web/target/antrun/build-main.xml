@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <fileset id="webfiles" dir="/Users/bentan/Downloads/yamcs-yamcs-5.8.8/yamcs-web/target/webapp/static" />
+    <property name="prop.webfiles" refid="webfiles" />
+    <echo file="/Users/bentan/Downloads/yamcs-yamcs-5.8.8/yamcs-web/target/webapp/static/manifest.txt">${prop.webfiles}</echo>
+  </target>
+</project>

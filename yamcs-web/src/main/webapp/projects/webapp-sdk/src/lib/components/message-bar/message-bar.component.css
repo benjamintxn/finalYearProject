@@ -1,0 +1,31 @@
+.message-bar {
+  background-color: #ff4100 !important;
+  color: #fff !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.message-bar.warning {
+  background-color: darkorange !important;
+}
+
+.mat-toolbar-row {
+  height: 48px;
+}
+
+.mat-toolbar-multiple-rows {
+  min-height: 48px;
+}
+
+.actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff4100;
+  height: 48px;
+  line-height: 48px;
+}
+
+.message-bar.warning .actions {
+  background-color: darkorange !important;
+}
