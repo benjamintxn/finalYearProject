@@ -1,8 +1,0 @@
-table th, table td {
-  white-space: nowrap;
-}
-
-.tree {
-  white-space: pre;
-  color: var(--y-accent);
-}

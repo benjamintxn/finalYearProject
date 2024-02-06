@@ -1,57 +1,61 @@
-# Yamcs Mission Control ![Maven Central](https://img.shields.io/maven-central/v/org.yamcs/yamcs.svg?label=release)
+# Yamcs QuickStart
 
-* Website: https://yamcs.org
-* Mailing list: [Google Groups](https://groups.google.com/group/yamcs/)
+This repository holds the source code to start a basic Yamcs application that monitors a simulated spacecraft in low earth orbit.
 
-Yamcs is a mission control framework developed in Java. It uses an open-ended architecture that allows tailoring its feature set using yaml configuration files. You can also extend the default feature set by writing custom Java classes.
-
-To start developing your own Yamcs application, follow our [Getting Started](https://yamcs.org/getting-started) guide.
+You may find it useful as a starting point for your own project.
 
 
-## Documentation
+## Prerequisites
 
-* Server Manual: https://docs.yamcs.org/yamcs-server-manual/
-* Javadoc: https://docs.yamcs.org/javadoc/yamcs/latest/
+* Java 11+
+* Linux x64/aarch64, macOS x64, or Windows x64
 
+A copy of Maven 3.1+ is also required, however this gets automatically downloaded an installed by using the `./mvnw` shell script as detailed below.
 
-## License
-
-Yamcs is licensed under Affero GPLv3.
-
-For commercial licensing please contact [Space Applications Services](https://www.spaceapplications.com) with your use case.
+Note that Yamcs does not currently support running on Apple M1 or M2. We hope to address this soon.
 
 
-## Development Setup
+## Running Yamcs
 
-To work on the core components of Yamcs you need JDK11, Maven and npm.
+Here are some commands to get things started:
 
-Build Java jars:
+Compile this project:
 
-    mvn clean install -DskipTests
+    ./mvnw compile
 
-Build web interface:
+Start Yamcs on localhost:
 
-    cd yamcs-web/src/main/webapp
-    npm install
-    npm run build
-    cd -
+    ./mvnw yamcs:run
 
-These commands will produce an optimized production version of the web interface. This process will take a few minutes. For faster incremental builds run in watch mode (`npm run watch`).
+Same as yamcs:run, but allows a debugger to attach at port 7896:
 
-For demo and development purposes we work with an all-in-one simulation environment that uses many Yamcs features. In this simulation, Yamcs receives TM from a simple simulator of a landing spacecraft. Yamcs can also send some basic TC. The simulator starts together with Yamcs as a subprocess.
+    ./mvnw yamcs:debug
+    
+Delete all generated outputs and start over:
 
-    ./run-example.sh simulation
+    ./mvnw clean
 
-This configuration stores data to `/storage/yamcs-data`. Ensure this folder exists and that you can write to it.
-
-When Yamcs started successfully, you can visit the built-in web interface by navigating to `http://localhost:8090`.
-
-**Note to Windows users:** This repository uses some relative symbolic links. To support this on Windows:
-* Enable "Developer Mode" in Windows (allows to use `mklink` without administrative privileges).
-* Enable msysgit symlink support: `git config --global core.symlinks true`
-* If you already cloned the repository prior to these steps, `git status` will tell you how to convert the symlinks. 
+This will also delete Yamcs data. Change the `dataDir` property in `yamcs.yaml` to another location on your file system if you don't want that.
 
 
-## Contributions
+## Telemetry
 
-While Yamcs is managed and developed by Space Applications Services, we also consider pull requests from other contributors. For non-trivial patches we ask you to sign our [CLA](https://yamcs.org/static/Yamcs_Contributor_Agreement_v2.0.pdf).
+To start pushing CCSDS packets into Yamcs, run the included Python script:
+
+    python simulator.py
+
+This script will send packets at 1 Hz over UDP to Yamcs. There is enough test data to run for a full calendar day.
+
+The packets are a bit artificial and include a mixture of HK and accessory data.
+
+
+## Telecommanding
+
+This project defines a few example CCSDS telecommands. They are sent to UDP port 10025. The simulator.py script listens to this port. Commands  have no side effects. The script will only count them.
+
+
+## Bundling
+
+Running through Maven is useful during development, but it is not recommended for production environments. Instead bundle up your Yamcs application in a tar.gz file:
+
+    ./mvnw package

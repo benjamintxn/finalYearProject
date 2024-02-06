@@ -1,4 +1,0 @@
-.autogen
-*.rst
-!/overview.rst
-!/websocket.rst

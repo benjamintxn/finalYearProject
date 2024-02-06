@@ -1,8 +1,0 @@
-services:
-  - class: org.yamcs.archive.ReplayServer
-
-mdb:
-  - type: "sheet"
-    args: 
-      file: "mdb/refmdb.xls"
-      enableAliasReferences: false

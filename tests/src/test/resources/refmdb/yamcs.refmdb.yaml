@@ -1,3 +1,0 @@
-mdb:
-  - type: "sheet"
-    spec: "../yamcs-core/mdb/refmdb.xls"    
