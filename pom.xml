@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
-  <artifactId>myproject</artifactId>
+  <artifactId>VITA_BT_COMMS</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>My Project</name>
+  <name>VITA BT COMMS</name>
   <url>https://example.com</url>
 
   <properties>

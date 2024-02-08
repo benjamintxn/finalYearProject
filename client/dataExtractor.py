@@ -6,7 +6,7 @@ import base64
 # YAMCS API details
 yamcs_instance = "myproject"
 stream_name = "tm_realtime"
-yamcs_base_url = "http://localhost:8090"  # Adjust if YAMCS is not on localhost or uses a different port
+yamcs_base_url = "http://192.168.0.40:8090"  # Adjust if YAMCS is not on localhost or uses a different port
 
 # API endpoint for accessing packets from the archive
 yamcs_archive_api_url = f"{yamcs_base_url}/api/archive/{yamcs_instance}/packets?stream={stream_name}"

@@ -13,7 +13,7 @@ services:
 dataDir: yamcs-data
 
 instances:
-  - myproject
+  - VITA_BT_COMMS
 
 # Secret key unique to a particular Yamcs installation.
 # This is used to provide cryptographic signing.
