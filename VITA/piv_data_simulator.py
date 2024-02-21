@@ -2,9 +2,9 @@ import csv
 import time
 import random
 import os
-from datetime import datetime
 import socket
 import struct
+from datetime import datetime
 
 # Defining the path to the CSV file
 directory_path = '/Users/bentan/finalYearProject/VITA/1. Housekeeping'
@@ -18,18 +18,32 @@ os.makedirs(directory_path, exist_ok=True)
 def generate_data_row():
     current_time = int(time.time())
     formatted_time = datetime.utcfromtimestamp(current_time).strftime('%Y-%m-%d %H:%M:%S (UTC)')
-    phase = 1  # Assuming 'Phase' is an integer
-    v_line = 5  # Assuming 'VoltageLine' is an integer
-    p_w = round(random.uniform(0, 100), 2)  # Assuming 'Power' is a float
-    i_a = round(random.uniform(0, 10), 2)  # Assuming 'Current' is a float
-    v_v = round(random.uniform(0, 15), 2)  # Assuming 'Voltage' is a float
+    phase = 1  # Integer
+    v_line = 5  # Integer
+    p_w = round(random.uniform(0, 100), 2)  # Float
+    i_a = round(random.uniform(0, 10), 2)  # Float
+    v_v = round(random.uniform(0, 15), 2)  # Float
 
-    return [formatted_time, phase, v_line, p_w, i_a, v_v]
+    # For CSV: use formatted time
+    csv_data_row = [formatted_time, phase, v_line, p_w, i_a, v_v]
+    # For packet: use integer time
+    packet_data_row = [current_time, phase, v_line, p_w, i_a, v_v]
 
-# Function to send a packet
-def send_packet(data):
+    return csv_data_row, packet_data_row
+
+# Function to convert data row to binary and send as a packet
+def send_packet(data_row):
+    binary_data = b''
+    # Convert each element to binary and concatenate
+    for data in data_row:
+        if isinstance(data, int):  # For integers
+            binary_data += struct.pack('>i', data)  # 4-byte integer
+        elif isinstance(data, float):  # For floats
+            binary_data += struct.pack('>f', data)  # 4-byte float
+
+    # Send the binary data as a packet
     tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    tm_socket.sendto(data.encode(), ('localhost', 10015))  # Adjust IP and port as needed
+    tm_socket.sendto(binary_data, ('localhost', 10015))  # Adjust IP and port as needed
 
 # Check if the file exists and write the header only if creating the file for the first time
 if not os.path.exists(csv_file_path):
@@ -38,12 +52,12 @@ if not os.path.exists(csv_file_path):
         writer.writerow(["Time", "Phase", "V Line(V)", "P(W)", "I(A)", "V(V)"])
 
 # Generate data, append to CSV, and send as a packet
-for _ in range(20):  # Adjust the range for the desired number of data rows
-    data_row = generate_data_row()
+for _ in range(1):  # Adjust the range for the desired number of data rows
+    csv_data_row, packet_data_row = generate_data_row()
     with open(csv_file_path, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(data_row)
-        # Convert the data row to a string format suitable for sending and send as a packet
-        packet_data = ','.join(map(str, data_row))
-        send_packet(packet_data)
+        writer.writerow(csv_data_row)
+
+    # Convert the packet data row to binary format and send as a packet
+    send_packet(packet_data_row)
     time.sleep(1)  # Wait for 1 second between sending each packet
