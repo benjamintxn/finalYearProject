@@ -11,8 +11,8 @@ stream_name = "tm_realtime"
 yamcs_base_url = "http://localhost:8090"
 
 # Output CSV configuration
-output_directory = "/Users/bentan/finalYearProject/client/1.Housekeeping"
-csv_filename = "output_data.csv"
+output_directory = "/Users/bentan/finalYearProject/client/1. Housekeeping"
+csv_filename = "Output_PIV_Data.csv"
 csv_file_path = os.path.join(output_directory, csv_filename)
 
 # Ensure the output directory exists

@@ -7,7 +7,7 @@ import socket
 import struct
 
 # Defining the path to the CSV file
-directory_path = '/Users/bentan/finalYearProject/VITA/1.Housekeeping'
+directory_path = '/Users/bentan/finalYearProject/VITA/1. Housekeeping'
 csv_file_name = 'PIV_Data.csv'
 csv_file_path = os.path.join(directory_path, csv_file_name)
 
@@ -46,4 +46,4 @@ for _ in range(20):  # Adjust the range for the desired number of data rows
         # Convert the data row to a string format suitable for sending and send as a packet
         packet_data = ','.join(map(str, data_row))
         send_packet(packet_data)
-    time.sleep(1.5)  # Wait for 1 second between sending each packet
+    time.sleep(1)  # Wait for 1 second between sending each packet
