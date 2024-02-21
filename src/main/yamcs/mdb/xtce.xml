@@ -17,7 +17,7 @@
             <!-- Double Parameter Type -->
             <FloatParameterType name="double_t">
                 <UnitSet />
-                <FloatDataEncoding sizeInBits="64" />
+                <FloatDataEncoding sizeInBits="32" />
             </FloatParameterType>
             
             <!-- Integer Parameter Type for image size -->

@@ -2,69 +2,68 @@ import requests
 import csv
 import os
 import base64
+import time
+from datetime import datetime, timezone, timedelta
 
 # YAMCS API details
-yamcs_instance = "myproject"
+yamcs_instance = "VITA_BT_COMMS"
 stream_name = "tm_realtime"
-yamcs_base_url = "http://192.168.0.40:8090"  # Adjust if YAMCS is not on localhost or uses a different port
+yamcs_base_url = "http://localhost:8090"
 
-# API endpoint for accessing packets from the archive
-yamcs_archive_api_url = f"{yamcs_base_url}/api/archive/{yamcs_instance}/packets?stream={stream_name}"
-
-# Directory and CSV file where data will be saved
+# Output CSV configuration
 output_directory = "/Users/bentan/finalYearProject/client/1.Housekeeping"
 csv_filename = "output_data.csv"
 csv_file_path = os.path.join(output_directory, csv_filename)
 
 # Ensure the output directory exists
-os.makedirs(output_directory, exist_ok=True)
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory, exist_ok=True)
 
-# Function to fetch packets from YAMCS Archive
-def fetch_packets_from_archive():
+# Initialize the last processed packet's generation time to the current UTC time
+last_packet_time = datetime.now(timezone.utc)
+
+def fetch_packets_from_archive(last_time):
+    # Convert last_packet_time to the format expected by YAMCS API
+    formatted_last_time = last_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]+"Z"
+    
+    # API endpoint for accessing packets from the archive, filtering by generation time
+    yamcs_archive_api_url = f"{yamcs_base_url}/api/archive/{yamcs_instance}/packets?stream={stream_name}&start={formatted_last_time}"
+
     response = requests.get(yamcs_archive_api_url)
     if response.status_code == 200:
-        packets = response.json()
-        # Assuming 'packet' is the key containing packet data, adjust as necessary
-        return packets.get('packet', [])
+        packets = response.json().get('packet', [])
+        return packets
     else:
         print(f"Failed to fetch packets from YAMCS Archive: {response.status_code}")
         return []
 
-# Function to extract data from a packet and return as a CSV row
-import base64
-
 def extract_csv_row_from_packet(packet):
-    # Decode the packet data from base64
     try:
         base64_encoded_data = packet.get("packet")
         decoded_data = base64.b64decode(base64_encoded_data)
-        
-        # Attempt to decode the binary data to a UTF-8 string
         decoded_string = decoded_data.decode('utf-8')
-
-        # Check if the decoded string has the expected number of commas
         if decoded_string.count(',') == 5:
             return decoded_string.split(',')
-        else:
-            # Log or silently ignore unexpected data format
-            # print(f"Unexpected data format, skipping packet: {decoded_string}")
-            return None
-    except UnicodeDecodeError:
-        # Silently ignore UnicodeDecodeError errors
-        # You can log these errors here if needed
         return None
     except Exception as e:
-        # Handle other exceptions if necessary, or log them
-        # print(f"Error decoding packet: {e}")
         return None
 
-# Fetch packets from YAMCS Archive
-packets = fetch_packets_from_archive()
+while True:
+    packets = fetch_packets_from_archive(last_packet_time)
 
-# Write packet data to CSV
-with open(csv_file_path, 'a', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    for packet in packets:
-        csv_row = extract_csv_row_from_packet(packet)
-        if csv_row is not None:  # Only write rows that are not None
-            writer.writerow(csv_row)
+    with open(csv_file_path, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        for packet in packets:
+            csv_row = extract_csv_row_from_packet(packet)
+            if csv_row:
+                writer.writerow(csv_row)
+                # Update last_packet_time to the generation time of the current packet
+                packet_time = datetime.strptime(packet['generationTime'], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+                if packet_time > last_packet_time:
+                    last_packet_time = packet_time
+
+    # Add a small delay to ensure that the generation time of new packets is strictly after the last_packet_time
+    last_packet_time += timedelta(milliseconds=1)
+
+    # Sleep for some time before the next fetch
+    time.sleep(1)  # Adjust the sleep time as needed

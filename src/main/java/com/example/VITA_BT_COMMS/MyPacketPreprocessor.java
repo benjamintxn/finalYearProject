@@ -16,7 +16,7 @@ import org.yamcs.utils.TimeEncoding;
  * A single instance of this class is created, scoped to the link udp-in.
  * <p>
  * This is specified in the configuration file yamcs.VITA_BT_COMMS.yaml:
- * 
+ *
  * <pre>
  * ...
  * dataLinks:
