@@ -36,7 +36,6 @@
                    </SizeInBits>
                </BinaryDataEncoding>
            </BinaryParameterType>
-                   
         </ParameterTypeSet>
 
         <ParameterSet>
@@ -64,19 +63,29 @@
         </ParameterSet>
 
         <ContainerSet>
-            <!-- Housekeeping Container -->
             <SequenceContainer name="Housekeeping">
                 <EntryList>
                     <ParameterRefEntry parameterRef="Time" />
                     <ParameterRefEntry parameterRef="Phase" />
+                </EntryList>
+            </SequenceContainer>
+            
+            <SequenceContainer name="PIV Data">
+                <BaseContainer containerRef="Housekeeping"/>
                     <ParameterRefEntry parameterRef="VoltageLine" />
                     <ParameterRefEntry parameterRef="Power" />
                     <ParameterRefEntry parameterRef="Current" />
                     <ParameterRefEntry parameterRef="Voltage" />
-                </EntryList>
+            </SequenceContainer>
+            
+            <SequenceContainer name="Software Data">
+                <BaseContainer containerRef="Housekeeping"/>
+            </SequenceContainer>
+            
+            <SequenceContainer name="Storage Data">
+                <BaseContainer containerRef="Housekeeping"/>
             </SequenceContainer>
 
-            <!-- Environmental Container -->
             <SequenceContainer name="Environmental">
                 <EntryList>
                     <ParameterRefEntry parameterRef="Time" />
@@ -88,35 +97,44 @@
                     <ParameterRefEntry parameterRef="Gas" />
                 </EntryList>
             </SequenceContainer>
+            
+            <SequenceContainer name="Environmental Sensor Data">
+                <BaseContainer containerRef="Environmental"/>
+            </SequenceContainer>
 
-            <!-- Experiment Container -->
             <SequenceContainer name="Experiment">
                 <EntryList>
                     <ParameterRefEntry parameterRef="Time" />
                     <ParameterRefEntry parameterRef="Phase" />
+                </EntryList>
+            </SequenceContainer>
+            
+            <SequenceContainer name="Spectrometer Data">
+                <BaseContainer containerRef="Experiment"/>
                     <ParameterRefEntry parameterRef="SpectroNumber" />
                     <ParameterRefEntry parameterRef="Spectro415" />
                     <ParameterRefEntry parameterRef="Spectro480" />
                     <ParameterRefEntry parameterRef="Spectro555" />
+            </SequenceContainer>
+            
+            <SequenceContainer name="TCS Temperature Data">
+                <BaseContainer containerRef="Experiment"/>
                     <ParameterRefEntry parameterRef="Temperature1" />
                     <ParameterRefEntry parameterRef="Temperature2" />
                     <ParameterRefEntry parameterRef="Temperature3" />
                     <ParameterRefEntry parameterRef="Temperature4" />
-                </EntryList>
             </SequenceContainer>
 
-            <!-- Images Container -->
             <SequenceContainer name="Images">
                 <EntryList>
                     <ParameterRefEntry parameterRef="Images" />
                 </EntryList>
             </SequenceContainer>
-        </ContainerSet>
 
+        </ContainerSet>
     </TelemetryMetaData>
 
-    <!-- CommandMetaData can be simplified or removed if not needed -->
     <CommandMetaData>
-        <!-- Define your command structures here if needed -->
+        <!-- Command Definitions, if any -->
     </CommandMetaData>
 </SpaceSystem>

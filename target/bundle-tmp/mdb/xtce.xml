@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpaceSystem name="VITA_BT_COMMS" xmlns="http://www.omg.org/spec/XTCE/20180204" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
+    <TelemetryMetaData>
+        <ParameterTypeSet>
+            <!-- Integer Parameter Type -->
+            <IntegerParameterType name="int_t" signed="true">
+                <UnitSet />
+                <IntegerDataEncoding sizeInBits="32" />
+            </IntegerParameterType>
+
+            <!-- Float Parameter Type -->
+            <FloatParameterType name="float_t">
+                <UnitSet />
+                <FloatDataEncoding sizeInBits="32" />
+            </FloatParameterType>
+
+            <!-- Double Parameter Type -->
+            <FloatParameterType name="double_t">
+                <UnitSet />
+                <FloatDataEncoding sizeInBits="32" />
+            </FloatParameterType>
+            
+            <!-- Integer Parameter Type for image size -->
+           <IntegerParameterType name="image_size_t" signed="false">
+               <UnitSet />
+               <IntegerDataEncoding sizeInBits="32" />
+           </IntegerParameterType>
+           <!-- Binary Parameter Type for JPG images -->
+           <BinaryParameterType name="jpg_image_t">
+               <UnitSet />
+               <BinaryDataEncoding>
+                   <SizeInBits>
+                       <DynamicValue>
+                           <ParameterInstanceRef parameterRef="ImageSizeParameter" />
+                       </DynamicValue>
+                   </SizeInBits>
+               </BinaryDataEncoding>
+           </BinaryParameterType>
+                   
+        </ParameterTypeSet>
+
+        <ParameterSet>
+            <Parameter name="Time" parameterTypeRef="int_t" />
+            <Parameter name="Phase" parameterTypeRef="int_t" />
+            <Parameter name="VoltageLine" parameterTypeRef="int_t" />
+            <Parameter name="Power" parameterTypeRef="float_t" />
+            <Parameter name="Current" parameterTypeRef="float_t" />
+            <Parameter name="Voltage" parameterTypeRef="float_t" />
+            <Parameter name="SensorNumber" parameterTypeRef="int_t" />
+            <Parameter name="Temperature" parameterTypeRef="float_t" />
+            <Parameter name="Pressure" parameterTypeRef="double_t" />
+            <Parameter name="Humidity" parameterTypeRef="float_t" />
+            <Parameter name="Gas" parameterTypeRef="double_t" />
+            <Parameter name="Temperature1" parameterTypeRef="float_t" />
+            <Parameter name="Temperature2" parameterTypeRef="float_t" />
+            <Parameter name="Temperature3" parameterTypeRef="float_t" />
+            <Parameter name="Temperature4" parameterTypeRef="float_t" />
+            <Parameter name="SpectroNumber" parameterTypeRef="int_t" />
+            <Parameter name="Spectro415" parameterTypeRef="double_t" />
+            <Parameter name="Spectro480" parameterTypeRef="double_t" />
+            <Parameter name="Spectro555" parameterTypeRef="double_t" />
+            <Parameter name="Images" parameterTypeRef="jpg_image_t" />
+            <Parameter name="ImageSizeParameter" parameterTypeRef="image_size_t" />
+        </ParameterSet>
+
+        <ContainerSet>
+            <!-- Housekeeping Container -->
+            <SequenceContainer name="Housekeeping">
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Time" />
+                    <ParameterRefEntry parameterRef="Phase" />
+                    <ParameterRefEntry parameterRef="VoltageLine" />
+                    <ParameterRefEntry parameterRef="Power" />
+                    <ParameterRefEntry parameterRef="Current" />
+                    <ParameterRefEntry parameterRef="Voltage" />
+                </EntryList>
+            </SequenceContainer>
+
+            <!-- Environmental Container -->
+            <SequenceContainer name="Environmental">
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Time" />
+                    <ParameterRefEntry parameterRef="Phase" />
+                    <ParameterRefEntry parameterRef="SensorNumber" />
+                    <ParameterRefEntry parameterRef="Temperature" />
+                    <ParameterRefEntry parameterRef="Pressure" />
+                    <ParameterRefEntry parameterRef="Humidity" />
+                    <ParameterRefEntry parameterRef="Gas" />
+                </EntryList>
+            </SequenceContainer>
+
+            <!-- Experiment Container -->
+            <SequenceContainer name="Experiment">
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Time" />
+                    <ParameterRefEntry parameterRef="Phase" />
+                    <ParameterRefEntry parameterRef="SpectroNumber" />
+                    <ParameterRefEntry parameterRef="Spectro415" />
+                    <ParameterRefEntry parameterRef="Spectro480" />
+                    <ParameterRefEntry parameterRef="Spectro555" />
+                    <ParameterRefEntry parameterRef="Temperature1" />
+                    <ParameterRefEntry parameterRef="Temperature2" />
+                    <ParameterRefEntry parameterRef="Temperature3" />
+                    <ParameterRefEntry parameterRef="Temperature4" />
+                </EntryList>
+            </SequenceContainer>
+
+            <!-- Images Container -->
+            <SequenceContainer name="Images">
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Images" />
+                </EntryList>
+            </SequenceContainer>
+        </ContainerSet>
+
+    </TelemetryMetaData>
+
+    <!-- CommandMetaData can be simplified or removed if not needed -->
+    <CommandMetaData>
+        <!-- Define your command structures here if needed -->
+    </CommandMetaData>
+</SpaceSystem>
