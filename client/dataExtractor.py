@@ -7,30 +7,34 @@ import struct
 from datetime import datetime, timezone, timedelta
 
 # YAMCS API details
-yamcs_instance = "VITA_BT_COMMS"
-stream_name = "tm_realtime"
-yamcs_base_url = "http://localhost:8090"
+yamcsInstance = "VITA_BT_COMMS"
+streamName = "tm_realtime"
+yamcsBaseUrl = "http://localhost:8090"
 
-# Output CSV configuration
-output_directory = "/Users/bentan/finalYearProject/client/1. Housekeeping"
-csv_filename = "Output_PIV_Data.csv"
-csv_file_path = os.path.join(output_directory, csv_filename)
+# Base output directory
+baseOutputDirectory = "/Users/bentan/finalYearProject/client"
 
-# Ensure the output directory exists
-if not os.path.exists(output_directory):
-    os.makedirs(output_directory, exist_ok=True)
+# Mapping of containerType values to their corresponding directories and CSV filenames
+outputPaths = {
+    1: {"directory": "1. Housekeeping", "csvFilename": "Output_PIV_Data.csv"},
+    2: {"directory": "1. Housekeeping", "csvFilename": "Output_Software_Data.csv"},
+    3: {"directory": "1. Housekeeping", "csvFilename": "Output_Storage_Data.csv"},
+    4: {"directory": "2. Environmental", "csvFilename": "Output_Environmental_Sensor_Data.csv"},
+    5: {"directory": "3. Experiment", "csvFilename": "Output_Spectrometer_Data.csv"},
+    6: {"directory": "3. Experiment", "csvFilename": "Output_TCS_Temperature_Data.csv"},
+}
 
 # Initialize the last processed packet's generation time to the current UTC time
-last_packet_time = datetime.now(timezone.utc)
+lastPacketTime = datetime.now(timezone.utc)
 
-def fetch_packets_from_archive(last_time):
-    # Convert last_packet_time to the format expected by YAMCS API
-    formatted_last_time = last_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
+def fetchPacketsFromArchive(lastTime):
+    # Convert lastPacketTime to the format expected by YAMCS API
+    formattedLastTime = lastTime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
     
     # API endpoint for accessing packets from the archive, filtering by generation time
-    yamcs_archive_api_url = f"{yamcs_base_url}/api/archive/{yamcs_instance}/packets?stream={stream_name}&start={formatted_last_time}"
+    yamcsArchiveApiUrl = f"{yamcsBaseUrl}/api/archive/{yamcsInstance}/packets?stream={streamName}&start={formattedLastTime}"
 
-    response = requests.get(yamcs_archive_api_url)
+    response = requests.get(yamcsArchiveApiUrl)
     if response.status_code == 200:
         packets = response.json().get('packet', [])
         return packets
@@ -38,42 +42,67 @@ def fetch_packets_from_archive(last_time):
         print(f"Failed to fetch packets from YAMCS Archive: {response.status_code}")
         return []
 
-def extract_csv_row_from_packet(packet):
+def extractCSVRowFromPacket(packet):
     try:
-        base64_encoded_data = packet.get("packet")
-        decoded_data = base64.b64decode(base64_encoded_data)
+        base64EncodedData = packet.get("packet")
+        decodedData = base64.b64decode(base64EncodedData)
 
-        # Unpack binary data
-        current_time, phase, v_line = struct.unpack('>iii', decoded_data[:12])  # First 12 bytes: int, int, int
-        p_w, i_a, v_v = struct.unpack('>fff', decoded_data[12:])  # Next 12 bytes: float, float, float
+        # Unpack the containerType and the rest of the packet
+        containerType, currentTime, phase = struct.unpack('>iii', decodedData[:12])
 
-        # Round the float values to 2 decimal places
-        p_w, i_a, v_v = round(p_w, 2), round(i_a, 2), round(v_v, 2)
+        # Based on containerType, process and unpack the rest of the data accordingly
+        if containerType == 1:  # PIV Data
+            vLine, pW, iA, vV = struct.unpack('>ifff', decodedData[12:])
+            # Round the float values to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, vLine, round(pW, 2), round(iA, 2), round(vV, 2)]
+        elif containerType == 2:  # Software Data
+            software, = struct.unpack('>f', decodedData[12:16])
+            # Round the float value to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, round(software, 2)]
+        elif containerType == 3:  # Storage Data
+            storage, = struct.unpack('>f', decodedData[12:16])
+            # Round the float value to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, round(storage, 2)]
+        elif containerType == 4:  # Environmental Sensor Data
+            sensorNumber, temperature, pressure, humidity, gas = struct.unpack('>iffff', decodedData[12:])
+            # Round the float value to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, sensorNumber, round(temperature, 2), round(pressure,2), round(humidity, 2), round(gas, 2)]
+        elif containerType == 5:  # Spectrometer Data
+            spectroNumber, temperature2, temperature 3, temperature 4 = struct.unpack('>ffff', decodedData[12])
+            # Round the float value to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, round(temperature1, 2), round(temperature2, 2), round(temperature3, 2), round(temperature4, 2)]
+        elif containerType == 6:  # TCS Temperature Data
+            temperature1, temperature2, temperature 3, temperature 4 = struct.unpack('>ffff', decodedData[12])
+            # Round the float value to 2 decimal places before adding to csvRow
+            csvRow = [currentTime, phase, round(temperature1, 2), round(temperature2, 2), round(temperature3, 2), round(temperature4, 2)]
 
-        # Convert the UNIX timestamp to a formatted string
-        formatted_time = datetime.utcfromtimestamp(current_time).strftime('%Y-%m-%d %H:%M:%S (UTC)')
+        # Convert the UNIX timestamp to a formatted string for CSV
+        formattedTime = datetime.utcfromtimestamp(currentTime).strftime('%Y-%m-%d %H:%M:%S (UTC)')
+        csvRow[0] = formattedTime  # Replace the UNIX timestamp with the formatted string
 
-        return [formatted_time, phase, v_line, p_w, i_a, v_v]
+        return containerType, csvRow
     except Exception as e:
         print(f"Error processing packet: {e}")
-        return None
+        return None, None
+
 
 while True:
-    packets = fetch_packets_from_archive(last_packet_time)
+    packets = fetchPacketsFromArchive(lastPacketTime)
 
-    with open(csv_file_path, 'a', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        for packet in packets:
-            csv_row = extract_csv_row_from_packet(packet)
-            if csv_row:
-                writer.writerow(csv_row)
-                # Update last_packet_time to the generation time of the current packet
-                packet_time = datetime.strptime(packet['generationTime'], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
-                if packet_time > last_packet_time:
-                    last_packet_time = packet_time
+    for packet in packets:
+        containerType, csvRow = extractCSVRowFromPacket(packet)
+        if csvRow:
+            pathInfo = outputPaths.get(containerType)
+            if pathInfo:
+                csvFilePath = os.path.join(baseOutputDirectory, pathInfo['directory'], pathInfo['csvFilename'])
+                with open(csvFilePath, 'a', newline='') as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow(csvRow)
 
-    # Add a small delay to ensure that the generation time of new packets is strictly after the last_packet_time
-    last_packet_time += timedelta(milliseconds=1)
+            # Update lastPacketTime to the generation time of the current packet
+            packetTime = datetime.strptime(packet['generationTime'], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+            if packetTime > lastPacketTime:
+                lastPacketTime = packetTime
 
-    # Sleep for some time before the next fetch
-    time.sleep(1)  # Adjust the sleep time as needed
+    lastPacketTime += timedelta(milliseconds=1)
+    time.sleep(1)

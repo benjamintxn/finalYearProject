@@ -13,12 +13,6 @@
                 <UnitSet />
                 <FloatDataEncoding sizeInBits="32" />
             </FloatParameterType>
-
-            <!-- Double Parameter Type -->
-            <FloatParameterType name="double_t">
-                <UnitSet />
-                <FloatDataEncoding sizeInBits="32" />
-            </FloatParameterType>
             
             <!-- Integer Parameter Type for image size -->
            <IntegerParameterType name="image_size_t" signed="false">
@@ -39,25 +33,28 @@
         </ParameterTypeSet>
 
         <ParameterSet>
+            <Parameter name="ContainerType" parameterTypeRef="int_t"/>
             <Parameter name="Time" parameterTypeRef="int_t" />
             <Parameter name="Phase" parameterTypeRef="int_t" />
             <Parameter name="VoltageLine" parameterTypeRef="int_t" />
             <Parameter name="Power" parameterTypeRef="float_t" />
             <Parameter name="Current" parameterTypeRef="float_t" />
             <Parameter name="Voltage" parameterTypeRef="float_t" />
+            <Parameter name="Storage" parameterTypeRef="float_t" />
+            <Parameter name="Software" parameterTypeRef="float_t" />
             <Parameter name="SensorNumber" parameterTypeRef="int_t" />
             <Parameter name="Temperature" parameterTypeRef="float_t" />
-            <Parameter name="Pressure" parameterTypeRef="double_t" />
+            <Parameter name="Pressure" parameterTypeRef="float_t" />
             <Parameter name="Humidity" parameterTypeRef="float_t" />
-            <Parameter name="Gas" parameterTypeRef="double_t" />
+            <Parameter name="Gas" parameterTypeRef="float_t" />
             <Parameter name="Temperature1" parameterTypeRef="float_t" />
             <Parameter name="Temperature2" parameterTypeRef="float_t" />
             <Parameter name="Temperature3" parameterTypeRef="float_t" />
             <Parameter name="Temperature4" parameterTypeRef="float_t" />
             <Parameter name="SpectroNumber" parameterTypeRef="int_t" />
-            <Parameter name="Spectro415" parameterTypeRef="double_t" />
-            <Parameter name="Spectro480" parameterTypeRef="double_t" />
-            <Parameter name="Spectro555" parameterTypeRef="double_t" />
+            <Parameter name="Spectro415" parameterTypeRef="float_t" />
+            <Parameter name="Spectro480" parameterTypeRef="float_t" />
+            <Parameter name="Spectro555" parameterTypeRef="float_t" />
             <Parameter name="Images" parameterTypeRef="jpg_image_t" />
             <Parameter name="ImageSizeParameter" parameterTypeRef="image_size_t" />
         </ParameterSet>
@@ -65,29 +62,51 @@
         <ContainerSet>
             <SequenceContainer name="Housekeeping">
                 <EntryList>
+                    <ParameterRefEntry parameterRef="ContainerType" />
                     <ParameterRefEntry parameterRef="Time" />
                     <ParameterRefEntry parameterRef="Phase" />
                 </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="PIV Data">
-                <BaseContainer containerRef="Housekeeping"/>
+                <BaseContainer containerRef="Housekeeping">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="1"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
                     <ParameterRefEntry parameterRef="VoltageLine" />
                     <ParameterRefEntry parameterRef="Power" />
                     <ParameterRefEntry parameterRef="Current" />
                     <ParameterRefEntry parameterRef="Voltage" />
+                </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="Software Data">
-                <BaseContainer containerRef="Housekeeping"/>
+                <BaseContainer containerRef="Housekeeping">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="2"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Software"/>
+                </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="Storage Data">
-                <BaseContainer containerRef="Housekeeping"/>
+                <BaseContainer containerRef="Housekeeping">
+                <RestrictionCriteria>
+                    <Comparison parameterRef="ContainerType" value="3"/>
+                </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Storage" />
+                </EntryList>
             </SequenceContainer>
 
             <SequenceContainer name="Environmental">
                 <EntryList>
+                    <ParameterRefEntry parameterRef="ContainerType" />
                     <ParameterRefEntry parameterRef="Time" />
                     <ParameterRefEntry parameterRef="Phase" />
                     <ParameterRefEntry parameterRef="SensorNumber" />
@@ -99,30 +118,49 @@
             </SequenceContainer>
             
             <SequenceContainer name="Environmental Sensor Data">
-                <BaseContainer containerRef="Environmental"/>
+                <BaseContainer containerRef="Environmental">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="4"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
+                </EntryList>
             </SequenceContainer>
 
             <SequenceContainer name="Experiment">
                 <EntryList>
+                    <ParameterRefEntry parameterRef="ContainerType" />
                     <ParameterRefEntry parameterRef="Time" />
                     <ParameterRefEntry parameterRef="Phase" />
                 </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="Spectrometer Data">
-                <BaseContainer containerRef="Experiment"/>
+                <BaseContainer containerRef="Experiment">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="5"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
                     <ParameterRefEntry parameterRef="SpectroNumber" />
                     <ParameterRefEntry parameterRef="Spectro415" />
                     <ParameterRefEntry parameterRef="Spectro480" />
                     <ParameterRefEntry parameterRef="Spectro555" />
+                </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="TCS Temperature Data">
-                <BaseContainer containerRef="Experiment"/>
+                <BaseContainer containerRef="Experiment">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="6"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
+                <EntryList>
                     <ParameterRefEntry parameterRef="Temperature1" />
                     <ParameterRefEntry parameterRef="Temperature2" />
                     <ParameterRefEntry parameterRef="Temperature3" />
                     <ParameterRefEntry parameterRef="Temperature4" />
+                </EntryList>
             </SequenceContainer>
 
             <SequenceContainer name="Images">
