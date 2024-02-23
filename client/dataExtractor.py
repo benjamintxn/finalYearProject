@@ -68,11 +68,11 @@ def extractCSVRowFromPacket(packet):
             # Round the float value to 2 decimal places before adding to csvRow
             csvRow = [currentTime, phase, sensorNumber, round(temperature, 2), round(pressure,2), round(humidity, 2), round(gas, 2)]
         elif containerType == 5:  # Spectrometer Data
-            spectroNumber, temperature2, temperature 3, temperature 4 = struct.unpack('>ffff', decodedData[12])
+            spectroNumber, spectro415, spectro480, spectro555 = struct.unpack('>ifff', decodedData[12:])
             # Round the float value to 2 decimal places before adding to csvRow
-            csvRow = [currentTime, phase, round(temperature1, 2), round(temperature2, 2), round(temperature3, 2), round(temperature4, 2)]
+            csvRow = [currentTime, phase, spectroNumber, round(spectro415, 2), round(spectro480, 2), round(spectro555, 2)]
         elif containerType == 6:  # TCS Temperature Data
-            temperature1, temperature2, temperature 3, temperature 4 = struct.unpack('>ffff', decodedData[12])
+            temperature1, temperature2, temperature3, temperature4 = struct.unpack('>ffff', decodedData[12:])
             # Round the float value to 2 decimal places before adding to csvRow
             csvRow = [currentTime, phase, round(temperature1, 2), round(temperature2, 2), round(temperature3, 2), round(temperature4, 2)]
 
@@ -94,7 +94,14 @@ while True:
         if csvRow:
             pathInfo = outputPaths.get(containerType)
             if pathInfo:
-                csvFilePath = os.path.join(baseOutputDirectory, pathInfo['directory'], pathInfo['csvFilename'])
+                # Ensure the directory for this containerType exists
+                directoryPath = os.path.join(baseOutputDirectory, pathInfo['directory'])
+                os.makedirs(directoryPath, exist_ok=True)
+
+                # Construct the full path to the CSV file
+                csvFilePath = os.path.join(directoryPath, pathInfo['csvFilename'])
+
+                # Now you can safely open the file and write the row
                 with open(csvFilePath, 'a', newline='') as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(csvRow)

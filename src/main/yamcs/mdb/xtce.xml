@@ -69,39 +69,39 @@
             </SequenceContainer>
             
             <SequenceContainer name="PIV Data">
-                <BaseContainer containerRef="Housekeeping">
-                    <RestrictionCriteria>
-                        <Comparison parameterRef="ContainerType" value="1"/>
-                    </RestrictionCriteria>
-                </BaseContainer>
                 <EntryList>
                     <ParameterRefEntry parameterRef="VoltageLine" />
                     <ParameterRefEntry parameterRef="Power" />
                     <ParameterRefEntry parameterRef="Current" />
                     <ParameterRefEntry parameterRef="Voltage" />
                 </EntryList>
+                <BaseContainer containerRef="Housekeeping">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="1"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
             </SequenceContainer>
             
             <SequenceContainer name="Software Data">
+                <EntryList>
+                    <ParameterRefEntry parameterRef="Software"/>
+                </EntryList>
                 <BaseContainer containerRef="Housekeeping">
                     <RestrictionCriteria>
                         <Comparison parameterRef="ContainerType" value="2"/>
                     </RestrictionCriteria>
                 </BaseContainer>
-                <EntryList>
-                    <ParameterRefEntry parameterRef="Software"/>
-                </EntryList>
             </SequenceContainer>
             
             <SequenceContainer name="Storage Data">
-                <BaseContainer containerRef="Housekeeping">
-                <RestrictionCriteria>
-                    <Comparison parameterRef="ContainerType" value="3"/>
-                </RestrictionCriteria>
-                </BaseContainer>
                 <EntryList>
                     <ParameterRefEntry parameterRef="Storage" />
                 </EntryList>
+                <BaseContainer containerRef="Housekeeping">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="3"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
             </SequenceContainer>
 
             <SequenceContainer name="Environmental">
@@ -123,8 +123,6 @@
                         <Comparison parameterRef="ContainerType" value="4"/>
                     </RestrictionCriteria>
                 </BaseContainer>
-                <EntryList>
-                </EntryList>
             </SequenceContainer>
 
             <SequenceContainer name="Experiment">
@@ -136,31 +134,31 @@
             </SequenceContainer>
             
             <SequenceContainer name="Spectrometer Data">
-                <BaseContainer containerRef="Experiment">
-                    <RestrictionCriteria>
-                        <Comparison parameterRef="ContainerType" value="5"/>
-                    </RestrictionCriteria>
-                </BaseContainer>
                 <EntryList>
                     <ParameterRefEntry parameterRef="SpectroNumber" />
                     <ParameterRefEntry parameterRef="Spectro415" />
                     <ParameterRefEntry parameterRef="Spectro480" />
                     <ParameterRefEntry parameterRef="Spectro555" />
                 </EntryList>
+                <BaseContainer containerRef="Experiment">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="5"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
             </SequenceContainer>
             
             <SequenceContainer name="TCS Temperature Data">
-                <BaseContainer containerRef="Experiment">
-                    <RestrictionCriteria>
-                        <Comparison parameterRef="ContainerType" value="6"/>
-                    </RestrictionCriteria>
-                </BaseContainer>
                 <EntryList>
                     <ParameterRefEntry parameterRef="Temperature1" />
                     <ParameterRefEntry parameterRef="Temperature2" />
                     <ParameterRefEntry parameterRef="Temperature3" />
                     <ParameterRefEntry parameterRef="Temperature4" />
                 </EntryList>
+                <BaseContainer containerRef="Experiment">
+                    <RestrictionCriteria>
+                        <Comparison parameterRef="ContainerType" value="6"/>
+                    </RestrictionCriteria>
+                </BaseContainer>
             </SequenceContainer>
 
             <SequenceContainer name="Images">

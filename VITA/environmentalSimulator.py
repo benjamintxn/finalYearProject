@@ -7,8 +7,8 @@ import struct
 from datetime import datetime
 
 # Defining the path to the CSV file
-directoryPath = '/Users/bentan/finalYearProject/VITA/3. Experiment'
-csvFileName = 'Spectrometer_Data.csv'
+directoryPath = '/Users/bentan/finalYearProject/VITA/2. Envrionmental'
+csvFileName = 'Environmental_Sensor_Data.csv'
 csvFilePath = os.path.join(directoryPath, csvFileName)
 
 # Ensure the directory exists
@@ -16,19 +16,20 @@ os.makedirs(directoryPath, exist_ok=True)
 
 # Function to generate a single row of data
 def generateDataRow():
-    containerType = 5
+    containerType = 4
     currentTime = int(time.time())
     formattedTime = datetime.utcfromtimestamp(currentTime).strftime('%Y-%m-%d %H:%M:%S (UTC)')
     phase = 2  # Integer
-    spectroNumber = 3  # Integer
-    spectro415 = round(random.uniform(0, 1), 2)  # Float
-    spectro480 = round(random.uniform(0, 1), 2)  # Float
-    spectro555 = round(random.uniform(0, 1), 2)  # Float
+    sensorNumber = 1  # Integer
+    Temperature = round(random.uniform(20, 25), 2)  # Float
+    Pressure = round(random.uniform(0, 10), 2)  # Float
+    Humidity = round(random.uniform(0, 10), 2)  # Float
+    Gas = round(random.uniform(0, 10), 2)  # Float
 
     # For CSV: use formatted time
-    csvDataRow = [formattedTime, phase, spectroNumber, spectro415, spectro480, spectro555]
+    csvDataRow = [formattedTime, phase, sensorNumber, Temperature, Pressure, Humidity, Gas]
     # For packet: use integer time
-    packetDataRow = [containerType, currentTime, phase, spectroNumber, spectro415, spectro480, spectro555]
+    packetDataRow = [containerType, currentTime, phase, sensorNumber, Temperature, Pressure, Humidity, Gas]
 
     return csvDataRow, packetDataRow
 
@@ -44,13 +45,13 @@ def sendPacket(dataRow):
 
     # Send the binary data as a packet
     tmSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    tmSocket.sendto(binaryData, ('localhost', 10017))  # Adjust IP and port as needed
+    tmSocket.sendto(binaryData, ('localhost', 10016))  # Adjust IP and port as needed
 
 # Check if the file exists and write the header only if creating the file for the first time
 if not os.path.exists(csvFilePath):
     with open(csvFilePath, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["Time", "Phase", "Spectrometer Number", "Spectrometer 415", "Spectrometer 480", "Spectrometer 555"])
+        writer.writerow(["Time", "Phase", "Sensor Number", "Temperature", "Pressure", "Humidity", "Gas"])
 
 # Generate data, append to CSV, and send as a packet
 for _ in range(1):  # Adjust the range for the desired number of data rows

@@ -23,10 +23,28 @@ services:
   - class: org.yamcs.timeline.TimelineService
 
 dataLinks:
-  - name: udp-in
+  - name: udp-in-Housekeeping
     class: org.yamcs.tctm.UdpTmDataLink
-    stream: tm_realtime
+    stream: tm_realtime1
     port: 10015
+    packetPreprocessorClassName: com.example.VITA_BT_COMMS.MyPacketPreprocessor
+    
+  - name: udp-in-Environmental
+    class: org.yamcs.tctm.UdpTmDataLink
+    stream: tm_realtime2
+    port: 10016
+    packetPreprocessorClassName: com.example.VITA_BT_COMMS.MyPacketPreprocessor
+    
+  - name: udp-in-Experiment
+    class: org.yamcs.tctm.UdpTmDataLink
+    stream: tm_realtime3
+    port: 10017
+    packetPreprocessorClassName: com.example.VITA_BT_COMMS.MyPacketPreprocessor
+    
+  - name: udp-in-Images
+    class: org.yamcs.tctm.UdpTmDataLink
+    stream: tm_realtime4
+    port: 10018
     packetPreprocessorClassName: com.example.VITA_BT_COMMS.MyPacketPreprocessor
 
   - name: udp-out
@@ -41,12 +59,19 @@ mdb:
   # Valid loaders are: sheet, xtce or fully qualified name of the class
   - type: xtce
     args:
-      file: /Users/bentan/finalYearProject/src/main/yamcs/mdb/xtce.xml
+      file: "/Users/bentan/finalYearProject/src/main/yamcs/mdb/xtce.xml"
 
 # Configuration for streams created at server startup
 streamConfig:
   tm:
-    - name: "tm_realtime"
+    - name: "tm_realtime1"
+      rootContainer: "/VITA_BT_COMMS/Housekeeping"
+    - name: "tm_realtime2"
+      rootContainer: "/VITA_BT_COMMS/Environmental"
+    - name: "tm_realtime3"
+      rootContainer: "/VITA_BT_COMMS/Experiment"
+    - name: "tm_realtime4"
+      rootContainer: "/VITA_BT_COMMS/Images"
     - name: "tm_dump"
   cmdHist: ["cmdhist_realtime", "cmdhist_dump"]
   event: ["events_realtime", "events_dump"]
