@@ -171,6 +171,29 @@
     </TelemetryMetaData>
 
     <CommandMetaData>
-        <!-- Command Definitions, if any -->
+        <MetaCommandSet>
+            <!-- Command for Environmental Simulator Script -->
+            <MetaCommand name="ExecuteEnvironmentalSimulator">
+                <CommandContainer name="ExecuteEnvironmentalSimulatorContainer">
+                    <!-- Command structure and parameters (if any) -->
+                </CommandContainer>
+            </MetaCommand>
+            
+            <!-- Command for Experiment Simulator Script -->
+            <MetaCommand name="ExecuteExperimentSimulator">
+                <CommandContainer name="ExecuteExperimentSimulatorContainer">
+                    <!-- Command structure and parameters (if any) -->
+                </CommandContainer>
+            </MetaCommand>
+            
+            <!-- Command for Housekeeping Simulator Script -->
+            <MetaCommand name="ExecuteHousekeepingSimulator">
+                <CommandContainer name="ExecuteHousekeepingSimulatorContainer">
+                    <!-- Command structure and parameters (if any) -->
+                </CommandContainer>
+            </MetaCommand>
+        </MetaCommandSet>
     </CommandMetaData>
+
+
 </SpaceSystem>

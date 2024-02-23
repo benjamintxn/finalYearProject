@@ -1,72 +1,56 @@
 package com.example.VITA_BT_COMMS;
 
-import org.yamcs.YConfiguration;
-import org.yamcs.cmdhistory.CommandHistoryPublisher;
+import java.io.IOException;
 import org.yamcs.commanding.PreparedCommand;
-import org.yamcs.tctm.CcsdsSeqCountFiller;
 import org.yamcs.tctm.CommandPostprocessor;
-import org.yamcs.utils.ByteArrayUtils;
+import org.yamcs.YConfiguration;
 
-/**
- * Component capable of modifying command binary before passing it to the link for further dispatch.
- * <p>
- * A single instance of this class is created, scoped to the link udp-out.
- * <p>
- * This is specified in the configuration file yamcs.VITA_BT_COMMS.yaml:
- * 
- * <pre>
- * ...
- * dataLinks:
- *   - name: udp-out
- *     class: org.yamcs.tctm.UdpTcDataLink
- *     stream: tc_realtime
- *     host: localhost
- *     port: 10025
- *     commandPostprocessorClassName: com.example.VITA_BT_COMMS.MyCommandPostprocessor
- * ...
- * </pre>
- */
 public class MyCommandPostprocessor implements CommandPostprocessor {
 
-    private CcsdsSeqCountFiller seqFiller = new CcsdsSeqCountFiller();
-    private CommandHistoryPublisher commandHistory;
-
-    // Constructor used when this postprocessor is used without YAML configuration
     public MyCommandPostprocessor(String yamcsInstance) {
-        this(yamcsInstance, YConfiguration.emptyConfig());
+        // Constructor used without YAML configuration
     }
 
-    // Constructor used when this postprocessor is used with YAML configuration
-    // (commandPostprocessorClassArgs)
     public MyCommandPostprocessor(String yamcsInstance, YConfiguration config) {
+        // Constructor used with YAML configuration
     }
 
-    // Called by Yamcs during initialization
-    @Override
-    public void setCommandHistoryPublisher(CommandHistoryPublisher commandHistory) {
-        this.commandHistory = commandHistory;
-    }
-
-    // Called by Yamcs *after* a command was submitted, but *before* the link handles it.
-    // This method must return the (possibly modified) packet binary.
     @Override
     public byte[] process(PreparedCommand pc) {
-        byte[] binary = pc.getBinary();
+        // Get the full command identifier and extract the actual command name
+        String fullCommandName = pc.getCommandName();
+        String[] parts = fullCommandName.split("/");
+        String commandName = parts[parts.length - 1]; // Take the last part as the command name
 
-        // Set CCSDS packet length
-        ByteArrayUtils.encodeUnsignedShort(binary.length - 7, binary, 4);
+        switch (commandName) {
+            case "ExecuteEnvironmentalSimulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/environmentalSimulator.py");
+                break;
+            case "ExecuteExperimentSimulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/experimentSimulator.py");
+                break;
+            case "ExecuteHousekeepingSimulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/housekeepingSimulator.py");
+                break;
+            default:
+                System.err.println("Unknown command: " + commandName);
+                // Handle unknown command appropriately
+        }
 
-        // Set CCSDS sequence count
-        int seqCount = seqFiller.fill(binary);
+        // Return the original binary as is
+        return pc.getBinary();
+    }
 
-        // Publish the sequence count to Command History. This has no special
-        // meaning to Yamcs, but it shows how to store custom information specific
-        // to a command.
-        commandHistory.publish(pc.getCommandId(), "ccsds-seqcount", seqCount);
-
-        // Since we modified the binary, update the binary in Command History too.
-        commandHistory.publish(pc.getCommandId(), PreparedCommand.CNAME_BINARY, binary);
-
-        return binary;
+    private void executeScript(String scriptPath) {
+        try {
+            // Specify the full path to the Python executable
+            String pythonExecutablePath = "/usr/local/bin/python3"; // Adjust this path as per your Python installation
+            Process process = Runtime.getRuntime().exec(pythonExecutablePath + " " + scriptPath);
+            System.out.println("Executing script: " + scriptPath);
+            // Optionally, handle process output or errors here
+        } catch (IOException e) {
+            System.err.println("Error executing script: " + e.getMessage());
+            // Handle exception appropriately
+        }
     }
 }
