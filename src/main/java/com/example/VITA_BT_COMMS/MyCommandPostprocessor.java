@@ -32,6 +32,9 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
             case "ExecuteHousekeepingSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/housekeepingSimulator.py");
                 break;
+            case "ExecuteDataExtractor":
+                executeScript("/Users/bentan/finalYearProject/client/dataExtractor.py");
+                break;
             default:
                 System.err.println("Unknown command: " + commandName);
                 // Handle unknown command appropriately
