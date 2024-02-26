@@ -14,24 +14,16 @@
                 <FloatDataEncoding sizeInBits="32" />
             </FloatParameterType>
             
-            <!-- Integer Parameter Type for image size -->
-           <IntegerParameterType name="image_size_t" signed="false">
-               <UnitSet />
-               <IntegerDataEncoding sizeInBits="32" />
-           </IntegerParameterType>
-           <!-- Binary Parameter Type for JPG images -->
-           <BinaryParameterType name="jpg_image_t">
-               <UnitSet />
-               <BinaryDataEncoding>
-                   <SizeInBits>
-                       <DynamicValue>
-                           <ParameterInstanceRef parameterRef="ImageSizeParameter" />
-                       </DynamicValue>
-                   </SizeInBits>
-               </BinaryDataEncoding>
-           </BinaryParameterType>
+            <BinaryParameterType name="binary_t">
+                <BinaryDataEncoding>
+                    <SizeInBits>
+                        <FixedValue>10944</FixedValue> <!-- Adjust based on your packet size -->
+                    </SizeInBits>
+                </BinaryDataEncoding>
+            </BinaryParameterType>
+            
         </ParameterTypeSet>
-
+            
         <ParameterSet>
             <Parameter name="ContainerType" parameterTypeRef="int_t"/>
             <Parameter name="Time" parameterTypeRef="int_t" />
@@ -55,8 +47,9 @@
             <Parameter name="Spectro415" parameterTypeRef="float_t" />
             <Parameter name="Spectro480" parameterTypeRef="float_t" />
             <Parameter name="Spectro555" parameterTypeRef="float_t" />
-            <Parameter name="Images" parameterTypeRef="jpg_image_t" />
-            <Parameter name="ImageSizeParameter" parameterTypeRef="image_size_t" />
+            <Parameter name="ImagePackets" parameterTypeRef="int_t"/>
+            <Parameter name="ImageHeader" parameterTypeRef="int_t"/>
+            <Parameter name="Image_t" parameterTypeRef="binary_t"/>
         </ParameterSet>
 
         <ContainerSet>
@@ -160,12 +153,15 @@
                     </RestrictionCriteria>
                 </BaseContainer>
             </SequenceContainer>
-
-            <SequenceContainer name="Images">
+            
+            <SequenceContainer name="Image">
                 <EntryList>
-                    <ParameterRefEntry parameterRef="Images" />
+                    <ParameterRefEntry parameterRef="ImagePackets" />
+                    <ParameterRefEntry parameterRef="ImageHeader" />
+                    <ParameterRefEntry parameterRef="Image_t" />
                 </EntryList>
             </SequenceContainer>
+            
         </ContainerSet>
     </TelemetryMetaData>
 

@@ -24,7 +24,7 @@ outputPaths = {
     6: {"directory": "3. Experiment", "csvFilename": "Output_TCS_Temperature_Data.csv"},
 }
 
-# Initialize the last processed packet's generation time to the current UTC time
+# Initialize the last processed packet's gaeneration time to the current UTC time
 lastPacketTime = datetime.now(timezone.utc)
 
 def fetchPacketsFromArchive(lastTime):
