@@ -20,7 +20,7 @@ csv_file_path = os.path.join(csv_directory_path, csv_file_name)
 # Ensure the directory exists
 os.makedirs(csv_directory_path, exist_ok=True)
 
-def image_to_hex(image_path, output_format='JPEG', quality=25):
+def image_to_hex(image_path, output_format='JPEG', quality=100):
     with Image.open(image_path) as img:
         img_byte_arr = io.BytesIO()
         img.save(img_byte_arr, format=output_format, quality=quality)
@@ -37,52 +37,37 @@ def send_packet(hex_data, host='localhost', port=10018, packet_size=1400):
     global image_id_counter
 
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
-    # Calculate total data bytes from hex data
-    total_data_bytes = len(hex_data) // 2  # Convert hex length to byte length
-    
-    # Initial estimation of total packets
-    estimated_total_packets = (total_data_bytes + packet_size - 1) // packet_size
+    total_data_bytes = len(hex_data) // 2
+    header_format = '>IIII'  # Add another 'I' for the sequence number
+    container_type = 7
 
-    # Header format: two 4-byte (32-bit) integers for total_packets and image_id_counter
-    header_format = '>II'  # '>' denotes big-endian, 'I' denotes unsigned int (4 bytes)
-    max_possible_header = struct.calcsize(header_format)  # Calculate header size
-    max_payload_size = packet_size - max_possible_header  # Adjust payload size
-
-    # Recalculate total packets with adjusted payload size
+    header_size = struct.calcsize(header_format)
+    max_payload_size = packet_size - header_size
     total_packets = (total_data_bytes + max_payload_size - 1) // max_payload_size
 
-    for i in range(0, total_data_bytes, max_payload_size):
-        payload_size = min(total_data_bytes - i, max_payload_size)
-        packet_payload = bytes.fromhex(hex_data[i*2:(i+payload_size)*2])
-
-        # Padding the payload if it's less than the max_payload_size
+    for i, start in enumerate(range(0, total_data_bytes, max_payload_size), 1):  # Start sequence number from 1
+        payload_size = min(total_data_bytes - start, max_payload_size)
+        packet_payload = bytes.fromhex(hex_data[start*2:(start+payload_size)*2])
         packet_payload += b'\x00' * (max_payload_size - payload_size)
 
-        # Pack total_packets and image_id_counter into bytes using struct
-        header = struct.pack(header_format, total_packets, image_id_counter)
+        header = struct.pack(header_format, container_type, total_packets, image_id_counter, i)  # Include sequence number
+        full_packet = header + packet_payload
 
-        full_packet = header + packet_payload  # Combine header and payload
-
-        # Safety check: Ensure the full_packet size matches the specified packet_size
         if len(full_packet) != packet_size:
             raise ValueError(f"Full packet size mismatch: Expected {packet_size}, got {len(full_packet)}")
 
         udp_socket.sendto(full_packet, (host, port))
-        
-        current_packet_number = (i // max_payload_size) + 1
-        print(f"Sent packet {current_packet_number}/{total_packets} for Image ID {image_id_counter} to {host}:{port}")
-        
-        time.sleep(0.01)
+        print(f"Sent packet {i}/{total_packets} for Image ID {image_id_counter} to {host}:{port}")
+        time.sleep(0.1)
 
     udp_socket.close()
-    image_id_counter += 1  # Increment image ID for the next image
+    image_id_counter += 1
 
 class ImageHandler(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory and event.src_path.lower().endswith(('.jpg', '.jpeg')):
             print(f"New image detected: {event.src_path}")
-            hex_data = image_to_hex(event.src_path, quality=25)
+            hex_data = image_to_hex(event.src_path, quality=100)
             append_hex_to_csv(hex_data, csv_file_path)
             send_packet(hex_data)
 
