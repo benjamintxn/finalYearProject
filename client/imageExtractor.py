@@ -3,15 +3,16 @@ import requests
 import base64
 import struct
 import time
-import csv
 from datetime import datetime, timezone, timedelta
+from PIL import Image
+import io
 
 # YAMCS API details
 yamcsInstance = "VITA_BT_COMMS"
 streamName = "tm_realtime"
 yamcsBaseUrl = "http://localhost:8090/api/archive"
 
-# Base output directory for CSV files
+# Base output directory for images
 baseOutputDirectory = "/Users/bentan/finalYearProject/client/4. Images"
 
 # Ensure the output directory exists
@@ -23,7 +24,6 @@ lastPacketTime = datetime.now(timezone.utc)
 def fetchPacketsFromArchive(lastTime):
     formattedLastTime = lastTime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + "Z"
     yamcsArchiveApiUrl = f"{yamcsBaseUrl}/{yamcsInstance}/packets?stream={streamName}&start={formattedLastTime}"
-    
     response = requests.get(yamcsArchiveApiUrl)
     if response.status_code == 200:
         return response.json().get('packet', [])
@@ -40,36 +40,29 @@ def processImagePacket(packet):
         return
 
     if imageId not in image_data_buffers:
-        image_data_buffers[imageId] = {'total': totalPackets, 'received': 0, 'packets': [None] * totalPackets}
+        image_data_buffers[imageId] = {'total': totalPackets, 'packets': [None] * totalPackets}
 
-    image_buffer = image_data_buffers[imageId]
+    buffer = image_data_buffers[imageId]
     if 0 <= packetSeq - 1 < totalPackets:
-        if image_buffer['packets'][packetSeq - 1] is None:
-            packetHexData = packet[16:].hex()
-            if packetSeq == totalPackets:  # Last packet
-                # Trim trailing zeros from the last packet's hex data
-                packetHexData = packetHexData.rstrip('0')
-            image_buffer['packets'][packetSeq - 1] = packetHexData
-            image_buffer['received'] += 1
+        if not buffer['packets'][packetSeq - 1]:
+            buffer['packets'][packetSeq - 1] = packet[16:]
             print(f"Processed packet {packetSeq}/{totalPackets} for Image ID {imageId}")
-
-        if image_buffer['received'] == totalPackets:
-            # Combine hex data from all packets
-            hexData = ''.join(p for p in image_buffer['packets'] if p is not None)
-            saveHexDataToCSV(hexData, imageId)
-            del image_data_buffers[imageId]
+            if all(buffer['packets']):  # Check if all packets have been received
+                saveImageData(buffer['packets'], imageId)
+                print(f"Done processing Image ID {imageId}. Saved to {os.path.join(baseOutputDirectory, f'image_{imageId}.jpg')}")
+                del image_data_buffers[imageId]
     else:
         print(f"Skipping packet with out-of-range sequence number: {packetSeq} for Image ID {imageId}")
 
-def saveHexDataToCSV(hexData, imageId):
-    csvFilePath = os.path.join(baseOutputDirectory, f"image_{imageId}.csv")
-    
-    with open(csvFilePath, 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(["HexData"])
-        csv_writer.writerow([hexData])
+def saveImageData(imageData, imageId):
+    imagePath = os.path.join(baseOutputDirectory, f"image_{imageId}.jpg")
+    with open(imagePath, 'wb') as file:
+        for packet in imageData:
+            if packet:  # Ensure the packet is not None
+                file.write(packet)
+    print(f"Image {imageId} saved to {imagePath}")
 
-    print(f"Hex data for image {imageId} saved to {csvFilePath}")
+print("Listening for new packets...")
 
 while True:
     packets = fetchPacketsFromArchive(lastPacketTime)
@@ -84,4 +77,4 @@ while True:
         processImagePacket(packetData)
 
     lastPacketTime = new_lastPacketTime + timedelta(milliseconds=1)
-    time.sleep(1)
+    time.sleep(1)  # Adjust sleep time as needed
