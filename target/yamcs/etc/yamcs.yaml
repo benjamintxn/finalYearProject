@@ -14,6 +14,9 @@ dataDir: yamcs-data
 
 instances:
   - VITA_BT_COMMS
+  
+buckets:
+  - name: fileStore
 
 # Secret key unique to a particular Yamcs installation.
 # This is used to provide cryptographic signing.
