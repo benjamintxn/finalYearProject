@@ -2,6 +2,7 @@ import os
 import socket
 import io
 import struct
+from yamcs.client import YamcsClient
 from PIL import Image
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
