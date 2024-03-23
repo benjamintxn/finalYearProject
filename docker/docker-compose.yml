@@ -1,4 +1,3 @@
-
 services:
   yamcs:
     build: .
@@ -18,7 +17,6 @@ services:
       - "10015:10015/udp"
       - "10016:10016/udp"
       - "10017:10017/udp"
-      - "10018:10018/tcp"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

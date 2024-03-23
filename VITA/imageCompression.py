@@ -1,7 +1,7 @@
 from PIL import Image
 import os
 
-def compress_image(image_path, output_directory):
+def compressImage(image_path, output_directory):
     """
     Compresses an image and saves the compressed version to a specified directory.
 

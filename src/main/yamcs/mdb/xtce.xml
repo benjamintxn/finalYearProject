@@ -14,14 +14,6 @@
                 <FloatDataEncoding sizeInBits="32" />
             </FloatParameterType>
             
-            <BinaryParameterType name="binary_t">
-                <BinaryDataEncoding>
-                    <SizeInBits>
-                        <FixedValue>10944</FixedValue> <!-- Adjust based on your packet size -->
-                    </SizeInBits>
-                </BinaryDataEncoding>
-            </BinaryParameterType>
-            
         </ParameterTypeSet>
             
         <ParameterSet>
@@ -47,10 +39,6 @@
             <Parameter name="Spectro415" parameterTypeRef="float_t" />
             <Parameter name="Spectro480" parameterTypeRef="float_t" />
             <Parameter name="Spectro555" parameterTypeRef="float_t" />
-            <Parameter name="ImagePackets" parameterTypeRef="int_t"/>
-            <Parameter name="ImageHeader" parameterTypeRef="int_t"/>
-            <Parameter name="ImageSequence" parameterTypeRef="int_t" />
-            <Parameter name="Image_t" parameterTypeRef="binary_t"/>
         </ParameterSet>
 
         <ContainerSet>
@@ -155,24 +143,6 @@
                 </BaseContainer>
             </SequenceContainer>
             
-            <SequenceContainer name="Image">
-                <EntryList>
-                    <ParameterRefEntry parameterRef="ContainerType" />
-                    <ParameterRefEntry parameterRef="ImagePackets" />
-                    <ParameterRefEntry parameterRef="ImageHeader" />
-                    <ParameterRefEntry parameterRef="ImageSequence" />
-                    <ParameterRefEntry parameterRef="Image_t" />
-                </EntryList>
-            </SequenceContainer>
-            
-            <SequenceContainer name="ImageData">
-                <BaseContainer containerRef="Image">
-                    <RestrictionCriteria>
-                        <Comparison parameterRef="ContainerType" value="7"/>
-                    </RestrictionCriteria>
-                </BaseContainer>
-            </SequenceContainer>
-            
         </ContainerSet>
     </TelemetryMetaData>
 
@@ -196,9 +166,21 @@
                 </CommandContainer>
             </MetaCommand>
             
+            <!-- Command for Image Simulator Script -->
+            <MetaCommand name="ExecuteImageSimulator">
+                <CommandContainer name="ExecuteImageSimulatorContainer">
+                </CommandContainer>
+            </MetaCommand>
+            
             <!-- Command for Data Extractor Script -->
             <MetaCommand name="ExecuteDataExtractor">
                 <CommandContainer name="ExecuteDataExtractorContainer">
+                </CommandContainer>
+            </MetaCommand>
+            
+            <!-- Command for Image Extractor Script -->
+            <MetaCommand name="ExecuteImageExtractor">
+                <CommandContainer name="ExecuteImageExtractorContainer">
                 </CommandContainer>
             </MetaCommand>
         </MetaCommandSet>

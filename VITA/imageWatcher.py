@@ -1,8 +1,8 @@
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from yamcsFileUploader import uploadToYAMCS
-from imageCompression import compress_image  # Import the compress_image function
+from imageUploader import uploadToYAMCS
+from imageCompression import compressImage  # Import the compress_image function
 
 # Configuration
 WATCH_DIRECTORY = "/Users/bentan/finalYearProject/VITA/4. Images"
@@ -36,7 +36,7 @@ class ImageEventHandler(FileSystemEventHandler):
     def on_created(event):
         if not event.is_directory and event.event_type == 'created':
             print(f"New image detected: {event.src_path}")
-            compressed_image_path = compress_image(event.src_path, COMPRESSED_IMAGE_DIR)
+            compressed_image_path = compressImage(event.src_path, COMPRESSED_IMAGE_DIR)
             uploadToYAMCS(compressed_image_path)
 
 if __name__ == "__main__":

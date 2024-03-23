@@ -1,4 +1,3 @@
-# yamcsFileUploader.py
 from yamcs.client import YamcsClient
 
 def uploadToYAMCS(file_path):

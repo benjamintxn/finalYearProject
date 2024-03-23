@@ -25,12 +25,12 @@ def main():
     if not fileExists(CSV_FILE_PATH):
         writeHeaderToCsv(CSV_FILE_PATH, headers)
     
-    for _ in range(1):  # Adjust the range as needed
+    for _ in range(1):
         csvDataRow, packetDataRow = generateDataRow()
         appendRowToCsv(CSV_FILE_PATH, csvDataRow)
         binaryData = convertDataRowToBinary(packetDataRow)
         sendPacket(binaryData, ADDRESS)
-        time.sleep(1)  # Interval between sending packets
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()

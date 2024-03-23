@@ -6,7 +6,6 @@ realtime:
             - tm_realtime1
             - tm_realtime2
             - tm_realtime3
-            - tm_realtime4
     - class: org.yamcs.StreamTcCommandReleaser
     - class: org.yamcs.tctm.StreamParameterProvider
     - class: org.yamcs.algorithms.AlgorithmManager

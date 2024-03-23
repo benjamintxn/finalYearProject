@@ -26,6 +26,12 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
             case "ExecuteEnvironmentalSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/environmentalSimulator.py");
                 break;
+            case "ExecuteImageSimulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/imageWatcher.py");
+                break;
+            case "ExecuteImageExtractor":
+                executeScript("/Users/bentan/finalYearProject/client/imageExtractor.py");
+                break;
             case "ExecuteExperimentSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/experimentSimulator.py");
                 break;

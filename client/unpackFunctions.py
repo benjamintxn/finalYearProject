@@ -1,4 +1,3 @@
-
 import struct
 
 def unpackPivData(decodedData):
