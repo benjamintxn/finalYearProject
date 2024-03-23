@@ -581,3 +581,35 @@ Block cache LRUCache@0x600002d475b8#26066 capacity: 8.00 MB usage: 423.69 KB tab
 Block cache entry stats(count,size,portion): DataBlock(8,418.73 KB,5.1114%) IndexBlock(10,3.35 KB,0.0408649%) Misc(1,0.00 KB,0%)
 
 ** File Read Latency Histogram By Level [_metadata_] **
+2024/03/23-11:42:09.764624 6218674176 [/db_impl/db_impl.cc:1110] ------- DUMPING STATS -------
+2024/03/23-11:42:09.765287 6218674176 [/db_impl/db_impl.cc:1111] 
+** DB Stats **
+Uptime(secs): 1800.1 total, 600.0 interval
+Cumulative writes: 65 writes, 191 keys, 65 commit groups, 1.0 writes per commit group, ingest: 0.03 GB, 0.02 MB/s
+Cumulative WAL: 65 writes, 0 syncs, 65.00 writes per sync, written: 0.03 GB, 0.02 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 3 writes, 9 keys, 3 commit groups, 1.0 writes per commit group, ingest: 0.39 MB, 0.00 MB/s
+Interval WAL: 3 writes, 0 syncs, 3.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2024/03/23-11:52:09.774412 6218674176 [/db_impl/db_impl.cc:1110] ------- DUMPING STATS -------
+2024/03/23-11:52:09.774903 6218674176 [/db_impl/db_impl.cc:1111] 
+** DB Stats **
+Uptime(secs): 2400.1 total, 600.0 interval
+Cumulative writes: 65 writes, 191 keys, 65 commit groups, 1.0 writes per commit group, ingest: 0.03 GB, 0.01 MB/s
+Cumulative WAL: 65 writes, 0 syncs, 65.00 writes per sync, written: 0.03 GB, 0.01 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 MB, 0.00 MB/s
+Interval WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2024/03/23-12:02:09.781424 6218674176 [/db_impl/db_impl.cc:1110] ------- DUMPING STATS -------
+2024/03/23-12:02:09.781672 6218674176 [/db_impl/db_impl.cc:1111] 
+** DB Stats **
+Uptime(secs): 3000.1 total, 600.0 interval
+Cumulative writes: 70 writes, 206 keys, 70 commit groups, 1.0 writes per commit group, ingest: 0.03 GB, 0.01 MB/s
+Cumulative WAL: 70 writes, 0 syncs, 70.00 writes per sync, written: 0.03 GB, 0.01 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 5 writes, 15 keys, 5 commit groups, 1.0 writes per commit group, ingest: 0.38 MB, 0.00 MB/s
+Interval WAL: 5 writes, 0 syncs, 5.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+2024/03/23-12:05:31.503369 6289502208 [/db_impl/db_impl.cc:497] Shutdown: canceling all background work
+2024/03/23-12:05:31.506220 6289502208 [/db_impl/db_impl.cc:704] Shutdown complete
