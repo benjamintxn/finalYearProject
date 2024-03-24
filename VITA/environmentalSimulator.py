@@ -1,15 +1,13 @@
 import time
 import random
-import socket
 import os
 from datetime import datetime
-from simulatorUtils import createDirectoryIfNotExists, fileExists, writeHeaderToCsv, appendRowToCsv, convertDataRowToBinary, sendPacket
+from simulatorUtils import createDirectoryIfNotExists, fileExists, writeHeaderToCsv, appendRowToCsv
 
 # Global variables for directory and file paths
 DIRECTORY_PATH = '/Users/bentan/finalYearProject/VITA/2. Environmental'
 CSV_FILE_NAME = 'Environmental_Sensor_Data.csv'
 CSV_FILE_PATH = os.path.join(DIRECTORY_PATH, CSV_FILE_NAME)
-ADDRESS = ('localhost', 10016)  # Adjust as needed for your network setup
 
 def generateDataRow():
     """Generate a single row of data for environmental sensor."""
@@ -22,21 +20,19 @@ def generateDataRow():
     humidity = round(random.uniform(0, 10), 2)
     gas = round(random.uniform(0, 10), 2)
     csvDataRow = [formattedTime, phase, sensorNumber, temperature, pressure, humidity, gas]
-    packetDataRow = [4, currentTime, phase, sensorNumber, temperature, pressure, humidity, gas]
-    return csvDataRow, packetDataRow
+    return csvDataRow
 
-def main():
+def main(number_of_rows):
     headers = ["Time", "Phase", "Sensor Number", "Temperature", "Pressure", "Humidity", "Gas"]
     createDirectoryIfNotExists(DIRECTORY_PATH)
     if not fileExists(CSV_FILE_PATH):
         writeHeaderToCsv(CSV_FILE_PATH, headers)
     
-    for _ in range(1):  # Adjust the range as needed
-        csvDataRow, packetDataRow = generateDataRow()
+    for _ in range(number_of_rows):
+        csvDataRow = generateDataRow()
         appendRowToCsv(CSV_FILE_PATH, csvDataRow)
-        binaryData = convertDataRowToBinary(packetDataRow)
-        sendPacket(binaryData, ADDRESS)
-        time.sleep(1)  # Interval between sending packets
+        time.sleep(1)  # Sleep for 1 second before generating the next row
 
 if __name__ == "__main__":
-    main()
+    number_of_rows = 50  # Set this to how many rows you want to generate
+    main(number_of_rows)

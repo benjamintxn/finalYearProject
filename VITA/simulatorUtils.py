@@ -34,6 +34,7 @@ def convertDataRowToBinary(dataRow):
             binaryData += struct.pack('>f', data)
     return binaryData
 
+
 def sendPacket(binaryData, address):
     """Send the binary data as a packet."""
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as tmSocket:
