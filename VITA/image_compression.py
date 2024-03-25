@@ -3,16 +3,11 @@ import os
 
 def compressImage(image_path, output_directory):
     """
-    Compresses an image and saves the compressed version to a specified directory.
-
-    Parameters:
-        image_path (str): The path to the original image.
-        output_directory (str): The directory where the compressed image will be saved.
-
-    Returns:
-        str: The path to the compressed image.
+    Compresses an image and saves it to a specified output directory.
+    :param image_path: Path to the original image to be compressed.
+    :param output_directory: Directory where the compressed image will be saved.
+    :return: Path to the saved compressed image.
     """
-
     # Ensure the output directory exists
     os.makedirs(output_directory, exist_ok=True)
 

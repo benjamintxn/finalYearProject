@@ -1,5 +1,5 @@
 # Configuration for each type of simulator data
-simulatorConfig = {
+simulatorDirectory = {
     '/Users/bentan/finalYearProject/VITA/1. Housekeeping': {
         'address': ('localhost', 10015),
         'packet_id': 1,
