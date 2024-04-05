@@ -149,40 +149,35 @@
     <CommandMetaData>
         <MetaCommandSet>
             <!-- Command for Environmental Simulator Script -->
-            <MetaCommand name="ExecuteEnvironmentalSimulator">
-                <CommandContainer name="ExecuteEnvironmentalSimulatorContainer">
+            <MetaCommand name="Execute Environmental Simulator">
+                <CommandContainer name="Execute Environmental Simulator Container">
                 </CommandContainer>
             </MetaCommand>
             
             <!-- Command for Experiment Simulator Script -->
-            <MetaCommand name="ExecuteExperimentSimulator">
-                <CommandContainer name="ExecuteExperimentSimulatorContainer">
+            <MetaCommand name="Execute Experiment Simulator">
+                <CommandContainer name="Execute Experiment Simulator Container">
                 </CommandContainer>
             </MetaCommand>
             
             <!-- Command for Housekeeping Simulator Script -->
-            <MetaCommand name="ExecuteHousekeepingSimulator">
-                <CommandContainer name="ExecuteHousekeepingSimulatorContainer">
+            <MetaCommand name="Execute Housekeeping Simulator">
+                <CommandContainer name="Execute Housekeeping Simulator Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for Image Simulator Script -->
-            <MetaCommand name="ExecuteImageSimulator">
-                <CommandContainer name="ExecuteImageSimulatorContainer">
+            <!-- Command for Image Watcher and Uploader Script -->
+            <MetaCommand name="Execute Image Watcher and Uploader">
+                <CommandContainer name="Execute Image Watcher and Uploader Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for Data Extractor Script -->
-            <MetaCommand name="ExecuteDataExtractor">
-                <CommandContainer name="ExecuteDataExtractorContainer">
+            <!-- Command for CSV Watcher Script -->
+            <MetaCommand name="Execute CSV Watcher">
+                <CommandContainer name="Execute CSV Watcher Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for Image Extractor Script -->
-            <MetaCommand name="ExecuteImageExtractor">
-                <CommandContainer name="ExecuteImageExtractorContainer">
-                </CommandContainer>
-            </MetaCommand>
         </MetaCommandSet>
     </CommandMetaData>
 </SpaceSystem>
