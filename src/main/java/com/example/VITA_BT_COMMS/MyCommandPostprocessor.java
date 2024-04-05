@@ -23,23 +23,21 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
         String commandName = parts[parts.length - 1]; // Take the last part as the command name
 
         switch (commandName) {
-            case "ExecuteEnvironmentalSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/environmentalSimulator.py");
+            case "Execute Environmental Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/environmental_simulator.py");
                 break;
-            case "ExecuteImageSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/imageWatcher.py");
+            case "Execute Experiment Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/experiment_simulator.py");
                 break;
-            case "ExecuteImageExtractor":
-                executeScript("/Users/bentan/finalYearProject/client/imageExtractor.py");
+            case "Execute Housekeeping Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
                 break;
-            case "ExecuteExperimentSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/experimentSimulator.py");
+            case "Execute Image Watcher and Uploader":
+                executeScript("/Users/bentan/finalYearProject/VITA/image_watcher.py");
+                executeScript("/Users/bentan/finalYearProject/VITA/image_uploader.py");
                 break;
-            case "ExecuteHousekeepingSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/housekeepingSimulator.py");
-                break;
-            case "ExecuteDataExtractor":
-                executeScript("/Users/bentan/finalYearProject/client/dataExtractor.py");
+            case "Execute CSV Watcher":
+                executeScript("/Users/bentan/finalYearProject/VITA/csv_watcher.py");
                 break;
             default:
                 System.err.println("Unknown command: " + commandName);

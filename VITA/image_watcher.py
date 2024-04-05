@@ -23,7 +23,7 @@ class ImageWatcher:
         :param watch_directory: The directory path to monitor for new images.
         """
         event_handler = ImageEventHandler()
-        self.observer.schedule(event_handler, self.watch_directory, recursive=True)
+        self.observer.schedule(event_handler, self.watch_directory, recursive=False)
         self.observer.start()
         try:
             while True:
