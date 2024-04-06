@@ -17,47 +17,51 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
 
     @Override
     public byte[] process(PreparedCommand pc) {
-        // Get the full command identifier and extract the actual command name
+        
         String fullCommandName = pc.getCommandName();
         String[] parts = fullCommandName.split("/");
-        String commandName = parts[parts.length - 1]; // Take the last part as the command name
-
+        String commandName = parts[parts.length - 1];
         switch (commandName) {
-            case "Execute Environmental Simulator":
+                
+            case "ExecuteEnvironmentalSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/environmental_simulator.py");
                 break;
-            case "Execute Experiment Simulator":
+            case "ExecuteExperimentSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/experiment_simulator.py");
                 break;
-            case "Execute Housekeeping Simulator":
+            case "ExecuteHousekeepingSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
                 break;
-            case "Execute Image Watcher and Uploader":
+            case "ExecuteImageWatcherAndUploader":
                 executeScript("/Users/bentan/finalYearProject/VITA/image_watcher.py");
                 executeScript("/Users/bentan/finalYearProject/VITA/image_uploader.py");
                 break;
-            case "Execute CSV Watcher":
+            case "ExecuteCSVWatcher":
                 executeScript("/Users/bentan/finalYearProject/VITA/csv_watcher.py");
                 break;
             default:
                 System.err.println("Unknown command: " + commandName);
-                // Handle unknown command appropriately
+                
         }
 
-        // Return the original binary as is
         return pc.getBinary();
+        
     }
 
     private void executeScript(String scriptPath) {
+        
         try {
-            // Specify the full path to the Python executable
-            String pythonExecutablePath = "/usr/local/bin/python3"; // Adjust this path as per your Python installation
+            
+            String pythonExecutablePath = "/usr/local/bin/python3";
             Process process = Runtime.getRuntime().exec(pythonExecutablePath + " " + scriptPath);
             System.out.println("Executing script: " + scriptPath);
-            // Optionally, handle process output or errors here
+            
         } catch (IOException e) {
+            
             System.err.println("Error executing script: " + e.getMessage());
-            // Handle exception appropriately
+
         }
+        
     }
+    
 }
