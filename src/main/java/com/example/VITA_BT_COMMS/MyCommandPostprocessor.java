@@ -22,15 +22,15 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
         String[] parts = fullCommandName.split("/");
         String commandName = parts[parts.length - 1];
         switch (commandName) {
-                
+
+            case "ExecuteHousekeepingSimulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
+                break;
             case "ExecuteEnvironmentalSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/environmental_simulator.py");
                 break;
             case "ExecuteExperimentSimulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/experiment_simulator.py");
-                break;
-            case "ExecuteHousekeepingSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
                 break;
             case "ExecuteImageWatcherAndUploader":
                 executeScript("/Users/bentan/finalYearProject/VITA/image_watcher.py");
