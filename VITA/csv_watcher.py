@@ -17,9 +17,9 @@ class FileWatcher(FileSystemEventHandler):
         """
         super().__init__()
         self.config = config
-        self.last_sent_line = {} # Tracks the last sent line number for each file.
-        self.last_sent_timestamp = {} # Tracks the last sent timestamp for each file to avoid duplicates.
-        self.last_event_time = 0 # Tracks the last event time for debounce logic.
+        self.last_sent_line = {}
+        self.last_sent_timestamp = {}
+        self.last_event_time = 0
         self.initialiseConfig()
 
     def initialiseConfig(self):
@@ -29,7 +29,6 @@ class FileWatcher(FileSystemEventHandler):
         for directory_path, settings in self.config.items():
             csv_file_path = os.path.join(directory_path, settings['csv_file_name'])
             self.last_sent_line[csv_file_path] = 0
-            # Initialise last_sent_timestamp to 0 instead of None
             self.last_sent_timestamp[csv_file_path] = 0
 
     def on_modified(self, event):
@@ -37,50 +36,35 @@ class FileWatcher(FileSystemEventHandler):
             self.processModification(event.src_path)
 
     def processModification(self, csv_file_path):
-        # Immediately handle the file modification without waiting
         self.handleFileModification(csv_file_path)
 
     def handleFileModification(self, csv_file_path):
         with open(csv_file_path, 'r') as file:
             lines = file.readlines()
-            # Calculate start_index to ensure we skip the header and start from the next unprocessed line
             start_index = self.last_sent_line.get(csv_file_path, 0) + 1
-
             for index, line in enumerate(lines[start_index:], start=start_index):
                 try:
                     row = line.strip().split(',')
                     if len(row) < 2:
-                        continue  # Skip invalid or header lines
-
+                        continue
                     formatted_time = datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S (UTC)')
                     timestamp = int(formatted_time.timestamp())
-
-                    # Only process new timestamps
                     if timestamp > self.last_sent_timestamp.get(csv_file_path, 0):
                         self.last_sent_timestamp[csv_file_path] = timestamp
                         settings = self.config[os.path.dirname(csv_file_path)]
                         packetData = [settings['packet_id'], timestamp]
-
-                        # Process each value appropriately
                         for val in row[1:]:
                             try:
-                                # Try converting to int first
                                 packetData.append(int(val))
                             except ValueError:
                                 try:
-                                    # If int conversion fails, try float
                                     packetData.append(float(val))
                                 except ValueError:
-                                    # If both conversions fail, print a warning and skip
                                     print(f"Warning: Value '{val}' in line {index} could not be processed as int or float.")
                                     continue
-
                         binaryData = convertDataRowToBinary(packetData)
                         sendPacket(binaryData, settings['address'])
-
-                        # Update last_sent_line here to ensure every line is processed
                         self.last_sent_line[csv_file_path] = index
-
                 except ValueError as e:
                     print(f"Error processing line: {line}. Error: {e}")
 
