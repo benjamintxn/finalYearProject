@@ -7,13 +7,11 @@ import struct
 from datetime import datetime, timezone, timedelta
 from unpackFunctions import unpackingFunctions
 
-# YAMCS API details and base output directory
 YAMCS_INSTANCE = "VITA_BT_COMMS"
 STREAM_NAME = "tm_realtime"
 YAMCS_BASE_URL = "http://localhost:8090"
 BASE_OUTPUT_DIRECTORY = "/Users/bentan/finalYearProject/client"
 
-# Mapping of containerType values to their corresponding directories and CSV filenames
 OUTPUT_PATHS = {
     1: {"directory": "1. Housekeeping", "csvFilename": "Output_PIV_Data.csv"},
     2: {"directory": "1. Housekeeping", "csvFilename": "Output_Software_Data.csv"},
@@ -23,7 +21,6 @@ OUTPUT_PATHS = {
     6: {"directory": "3. Experiment", "csvFilename": "Output_TCS_Temperature_Data.csv"},
 }
 
-# Initialize the last processed packet's generation time to the current UTC time
 lastPacketTime = datetime.now(timezone.utc)
 
 def fetchPacketsFromArchive(lastTime):
@@ -43,17 +40,13 @@ def extractCsvRowFromPacket(packet):
         base64EncodedData = packet.get("packet")
         decodedData = base64.b64decode(base64EncodedData)
         containerType, currentTime, phase = struct.unpack('>iii', decodedData[:12])
-
         if containerType in unpackingFunctions:
             additionalData = unpackingFunctions[containerType](decodedData)
             csvRow = [currentTime, phase] + additionalData
         else:
             raise ValueError(f"Unknown containerType: {containerType}")
-
-        # Convert the UNIX timestamp to a formatted string for CSV
         formattedTime = datetime.utcfromtimestamp(currentTime).strftime('%Y-%m-%d %H:%M:%S (UTC)')
-        csvRow[0] = formattedTime  # Replace the UNIX timestamp with the formatted string
-
+        csvRow[0] = formattedTime
         return containerType, csvRow
     except Exception as e:
         print(f"Error processing packet: {e}")
