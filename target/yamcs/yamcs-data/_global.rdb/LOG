@@ -412,3 +412,5 @@ Block cache entry stats(count,size,portion): Misc(1,0.00 KB,0%)
 2024/04/08-12:06:35.148959 6168801280                Options.blob_file_starting_level: 0
 2024/04/08-12:06:35.148960 6168801280 Options.experimental_mempurge_threshold: 0.000000
 2024/04/08-12:06:35.148992 6168801280 [/db_impl/db_impl.cc:3108] Created column family [_metadata_] (ID 1)
+2024/04/08-12:11:33.649595 6268252160 [/db_impl/db_impl.cc:497] Shutdown: canceling all background work
+2024/04/08-12:11:33.650401 6268252160 [/db_impl/db_impl.cc:704] Shutdown complete

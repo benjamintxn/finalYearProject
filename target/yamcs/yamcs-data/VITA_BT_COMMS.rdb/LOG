@@ -438,3 +438,5 @@ Block cache LRUCache@0x600002e00388#42561 capacity: 8.00 MB usage: 0.08 KB table
 Block cache entry stats(count,size,portion): Misc(1,0.00 KB,0%)
 
 ** File Read Latency Histogram By Level [_metadata_] **
+2024/04/08-12:11:33.648328 6268252160 [/db_impl/db_impl.cc:497] Shutdown: canceling all background work
+2024/04/08-12:11:33.648665 6268252160 [/db_impl/db_impl.cc:704] Shutdown complete
