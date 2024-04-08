@@ -167,7 +167,7 @@
             </MetaCommand>
             
             <!-- Command for Image Watcher and Uploader Script -->
-            <MetaCommand name="Execute Image Watcher and Uploader">
+            <MetaCommand name="Execute Image Watcher And Uploader">
                 <CommandContainer name="Execute Image Watcher and Uploader Container">
                 </CommandContainer>
             </MetaCommand>

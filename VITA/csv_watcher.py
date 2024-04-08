@@ -1,5 +1,6 @@
 import time
 import os
+import cProfile
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -86,4 +87,4 @@ def main():
     observer.join()
 
 if __name__ == "__main__":
-    main()
+    cProfile.run('main()', sort='cumtime')
