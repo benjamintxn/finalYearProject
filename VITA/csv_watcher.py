@@ -1,6 +1,5 @@
 import time
 import os
-import cProfile
 from datetime import datetime
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -37,6 +36,7 @@ class FileWatcher(FileSystemEventHandler):
             self.processModification(event.src_path)
 
     def processModification(self, csv_file_path):
+        print(f"Processing received data from {csv_file_path}")
         self.handleFileModification(csv_file_path)
 
     def handleFileModification(self, csv_file_path):
@@ -87,4 +87,4 @@ def main():
     observer.join()
 
 if __name__ == "__main__":
-    cProfile.run('main()', sort='cumtime')
+    main()

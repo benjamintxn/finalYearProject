@@ -2,6 +2,7 @@ package com.example.VITA_BT_COMMS;
 
 import org.yamcs.commanding.PreparedCommand;
 import org.yamcs.tctm.CommandPostprocessor;
+import java.io.IOException;
 import org.yamcs.YConfiguration;
 
 public class MyCommandPostprocessor implements CommandPostprocessor {
@@ -21,29 +22,17 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
         String[] parts = fullCommandName.split("/");
         String commandName = parts[parts.length - 1];
         switch (commandName) {
-<<<<<<< HEAD
                 
             case "Execute Environmental Simulator":
-=======
-
-            case "ExecuteHousekeepingSimulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
-                break;
-            case "ExecuteEnvironmentalSimulator":
->>>>>>> origin/main
                 executeScript("/Users/bentan/finalYearProject/VITA/environmental_simulator.py");
                 break;
             case "Execute Experiment Simulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/experiment_simulator.py");
                 break;
-<<<<<<< HEAD
             case "Execute Housekeeping Simulator":
                 executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
                 break;
             case "Execute Image Watcher And Uploader":
-=======
-            case "ExecuteImageWatcherAndUploader":
->>>>>>> origin/main
                 executeScript("/Users/bentan/finalYearProject/VITA/image_watcher.py");
                 executeScript("/Users/bentan/finalYearProject/VITA/image_uploader.py");
                 break;
@@ -61,7 +50,17 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
 
     private void executeScript(String scriptPath) {
         
-        System.out.println("Executing script: " + scriptPath);
+        try {
+
+             String pythonExecutablePath = "/usr/local/bin/python3";
+             Process process = Runtime.getRuntime().exec(pythonExecutablePath + " " + scriptPath);
+             System.out.println("Executing script: " + scriptPath);
+
+         } catch (IOException e) {
+
+             System.err.println("Error executing script: " + e.getMessage());
+
+         }
         
     }
     
