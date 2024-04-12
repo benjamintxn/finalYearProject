@@ -37,6 +37,7 @@ def fetchPacketsFromArchive(lastTime):
 def extractCsvRowFromPacket(packet):
     """Extract CSV row from packet data."""
     try:
+        print(f"Processing new packet")
         base64EncodedData = packet.get("packet")
         decodedData = base64.b64decode(base64EncodedData)
         containerType, currentTime, phase = struct.unpack('>iii', decodedData[:12])
@@ -66,6 +67,7 @@ def processPackets():
     """Process packets fetched from YAMCS archive."""
     global lastPacketTime
     while True:
+        print("Checking for new packets...")
         packets = fetchPacketsFromArchive(lastPacketTime)
         for packet in packets:
             containerType, csvRow = extractCsvRowFromPacket(packet)
