@@ -1,4 +1,3 @@
-# Configuration for each type of simulator data
 simulatorDirectory = {
     '/Users/bentan/finalYearProject/VITA/1. Housekeeping': {
         'address': ('localhost', 10015),

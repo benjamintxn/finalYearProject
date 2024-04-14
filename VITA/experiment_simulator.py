@@ -4,10 +4,9 @@ import os
 from datetime import datetime
 from simulator_config import createDirectoryIfNotExists, fileExists, writeHeaderToCsv, appendRowToCsv
 
-# Global variables for directory and file paths
-directory_path = '/Users/bentan/finalYearProject/VITA/3. Experiment'
-csv_file_name = 'Spectrometer_Data.csv'
-csv_file_path = os.path.join(directory_path, csv_file_name)
+DIRECTORY_PATH = '/Users/bentan/finalYearProject/VITA/3. Experiment'
+CSV_FILE_NAME = 'Spectrometer_Data.csv'
+CSV_FILE_PATH = os.path.join(DIRECTORY_PATH, CSV_FILE_NAME)
 
 def generateDataRow():
     """
@@ -31,13 +30,13 @@ def main(number_of_rows):
     :param number_of_rows: The number of data rows to generate and write.
     """
     headers = ["Time", "Phase", "Spectrometer Number", "Spectrometer 415", "Spectrometer 480", "Spectrometer 555"]
-    createDirectoryIfNotExists(directory_path)
-    if not fileExists(csv_file_path):
-        writeHeaderToCsv(csv_file_path, headers)
+    createDirectoryIfNotExists(DIRECTORY_PATH)
+    if not fileExists(CSV_FILE_PATH):
+        writeHeaderToCsv(CSV_FILE_PATH, headers)
     
     for _ in range(number_of_rows):
         csv_data_row = generateDataRow()
-        appendRowToCsv(csv_file_path, csv_data_row)
+        appendRowToCsv(CSV_FILE_PATH, csv_data_row)
         time.sleep(1)
 
 if __name__ == "__main__":

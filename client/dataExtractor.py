@@ -63,7 +63,7 @@ def appendRowToCsv(filePath, row):
         writer = csv.writer(csvfile)
         writer.writerow(row)
 
-def processPackets():
+def main():
     """Process packets fetched from YAMCS archive."""
     global lastPacketTime
     while True:
@@ -85,4 +85,4 @@ def processPackets():
         time.sleep(1)
 
 if __name__ == "__main__":
-    processPackets()
+    main()
