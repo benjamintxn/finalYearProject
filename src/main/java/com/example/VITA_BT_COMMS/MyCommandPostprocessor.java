@@ -22,22 +22,31 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
         String[] parts = fullCommandName.split("/");
         String commandName = parts[parts.length - 1];
         switch (commandName) {
-                
-            case "Execute Environmental Simulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/environmental_simulator.py");
+
+            case "Execute PIV Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S1_Housekeeping_Simulators/piv_simulator.py");
+                break;    
+            case "Execute Software Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S1_Housekeeping_Simulators/software_simulator.py");
                 break;
-            case "Execute Experiment Simulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/experiment_simulator.py");
+            case "Execute Storage Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S1_Housekeeping_Simulators/storage_simulator.py");
+                break;    
+            case "Execute Environmental Sensor Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S2_Environmental_Simulator/environmental_sensor_simulator.py");
                 break;
-            case "Execute Housekeeping Simulator":
-                executeScript("/Users/bentan/finalYearProject/VITA/housekeeping_simulator.py");
+            case "Execute Spectrometer Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S3_Experiement_Simulators/spectrometer_simulator.py");
+                break;
+            case "Execute TCS Temperature Simulator":
+                executeScript("/Users/bentan/finalYearProject/VITA/S3_Experiement_Simulators/tcs_temperature_simulator.py");
                 break;
             case "Execute Image Watcher And Uploader":
-                executeScript("/Users/bentan/finalYearProject/VITA/image_watcher.py");
-                executeScript("/Users/bentan/finalYearProject/VITA/image_uploader.py");
+                executeScript("/Users/bentan/finalYearProject/VITA/S4_Image_Simulators/image_watcher.py");
+                executeScript("/Users/bentan/finalYearProject/VITA/S4_Image_Simulators/image_uploader.py");
                 break;
             case "Execute CSV Watcher":
-                executeScript("/Users/bentan/finalYearProject/VITA/csv_watcher.py");
+                executeScript("/Users/bentan/finalYearProject/VITA/SCSV_Data_Configurations/csv_watcher.py");
                 break;
             default:
                 System.err.println("Unknown command: " + commandName);

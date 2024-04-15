@@ -2,13 +2,11 @@
 <SpaceSystem name="VITA_BT_COMMS" xmlns="http://www.omg.org/spec/XTCE/20180204" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
     <TelemetryMetaData>
         <ParameterTypeSet>
-            <!-- Integer Parameter Type -->
             <IntegerParameterType name="int_t" signed="true">
                 <UnitSet />
                 <IntegerDataEncoding sizeInBits="32" />
             </IntegerParameterType>
 
-            <!-- Float Parameter Type -->
             <FloatParameterType name="float_t">
                 <UnitSet />
                 <FloatDataEncoding sizeInBits="32" />
@@ -148,33 +146,43 @@
 
     <CommandMetaData>
         <MetaCommandSet>
-            <!-- Command for Environmental Simulator Script -->
-            <MetaCommand name="Execute Environmental Simulator">
-                <CommandContainer name="Execute Environmental Simulator Container">
+            <MetaCommand name="Execute PIV Simulator">
+                <CommandContainer name="PIV Simulator Container">
+                </CommandContainer>
+            </MetaCommand>
+
+            <MetaCommand name="Execute Software Simulator">
+                <CommandContainer name="Software Simulator Container">
+                </CommandContainer>
+            </MetaCommand>
+
+            <MetaCommand name="Execute Storage Simulator">
+                <CommandContainer name="Storage Simulator Container">
+                </CommandContainer>
+            </MetaCommand>
+
+            <MetaCommand name="Execute Environmental Sensor Simulator">
+                <CommandContainer name="Environmental Sensor Simulator Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for Experiment Simulator Script -->
-            <MetaCommand name="Execute Experiment Simulator">
-                <CommandContainer name="Execute Experiment Simulator Container">
+            <MetaCommand name="Execute Spectrometer Simulator">
+                <CommandContainer name="Spectrometer Simulator Container">
+                </CommandContainer>
+            </MetaCommand>
+
+            <MetaCommand name="Execute TCS Temperature Simulator">
+                <CommandContainer name="TCS Temperature Simulator Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for Housekeeping Simulator Script -->
-            <MetaCommand name="Execute Housekeeping Simulator">
-                <CommandContainer name="Execute Housekeeping Simulator Container">
-                </CommandContainer>
-            </MetaCommand>
-            
-            <!-- Command for Image Watcher and Uploader Script -->
             <MetaCommand name="Execute Image Watcher And Uploader">
-                <CommandContainer name="Execute Image Watcher and Uploader Container">
+                <CommandContainer name="Image Watcher And Uploader Container">
                 </CommandContainer>
             </MetaCommand>
             
-            <!-- Command for CSV Watcher Script -->
             <MetaCommand name="Execute CSV Watcher">
-                <CommandContainer name="Execute CSV Watcher Container">
+                <CommandContainer name="CSV Watcher Container">
                 </CommandContainer>
             </MetaCommand>
             

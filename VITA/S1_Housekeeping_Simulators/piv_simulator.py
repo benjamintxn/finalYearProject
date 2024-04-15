@@ -2,6 +2,8 @@ import time
 import random
 import os
 from datetime import datetime
+import sys
+sys.path.append('/Users/bentan/finalYearProject/VITA/SCSV_Data_Configurations')
 from simulator_config import createDirectoryIfNotExists, fileExists, writeHeaderToCsv, appendRowToCsv
 
 DIRECTORY_PATH = '/Users/bentan/finalYearProject/VITA/1. Housekeeping'
